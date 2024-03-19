@@ -1,0 +1,36 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Unregistered user" as User
+participant ":System" as System
+
+activate User
+
+    User -> System : Enters the application
+    activate System
+
+    System --> User : Display listed properties the same way as a registered user
+    deactivate System
+
+    opt User uses filters
+    User -> System : Filters by type of business, property, number of rooms, price, city and/or state
+
+    activate System
+    System --> User : Returns the properties according to the filter(s) used
+    deactivate System
+
+        opt
+        User -> System : Filters by price (or more) and sorts by ascending or descending
+
+        activate System
+        System -> User : Returns the properties according to the filter(s) and sorts used
+        deactivate System
+
+        end
+    end
+@enduml
+

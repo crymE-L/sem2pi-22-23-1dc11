@@ -1,0 +1,334 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class MenuUI {}
+
+class DisplayPropertiesUI {}
+
+class DisplayPropertiesController {
+    + CreateDisplayPropertiesController()
+    + getPropertiesRepository()
+
+}
+
+class Repositories {
+    - Repositories
+    + getInstance() : Repositories
+    + getPropertiesRepository()
+    + getAgencyRepository()
+    + getTransactionRequestRepository()
+    + getAgencyRepository()
+    + getPassword()
+    + getRoleRepository()
+
+}
+
+class PropertiesRepository {
+    -Properties
+
+}
+
+class Property {
+    + address
+    + photos
+    + area
+    + distanceFromCenter
+    + price
+    + parish
+    + city
+    + state
+    + type
+    + owner
+    + agent
+    + visitRequests
+    + commission
+}
+
+class CreateTransactionRequestUI {}
+
+class CreateTransactionRequestController {
+	+ CreateTransactionRequestController(transactionRequestsRepository)
+	+ getTransactionRequestRepository()
+	+ createTransactionRequest(owner, buyer, agent, price, commission, accepted)
+}
+
+class TransactionRequest {
+	- Person owner
+	- Person buyer
+	- Employee agent
+	- int price
+	- float commission
+	- boolean accepted
+}
+
+class RegisterEmployeeUI {}
+
+class RegisterEmployeeController {
+    + RegisterEmployeeController(agencyRepository, roleRepository)
+    + getAgencyRepository()
+    + getRoleRepository()
+    + registerEmployee(name, passport's card number, tax number,\naddress, email address, telephone number, agency, role)
+
+}
+
+class AgencyRepository {}
+
+class Agency {}
+
+class RoleRepository {}
+
+class Role {}
+
+class EmployeeRepository {}
+
+class PasswordGenerator {}
+
+class AuthenticationRepository {
+    + userExists (email)
+}
+
+class Employee {
+    - String name
+    - String passport's card number
+    - String tax number
+    - String address
+    - String email address
+    - String telephone number
+    - Integer phone number
+    - String agency
+    - String role
+    - String password
+
+    + create(name, passport's card number, tax number,\naddress, email address, telephone number, agency, role, password)
+}
+
+class SystemAdministrator {
+    - phone number
+    - email
+    - password
+}
+
+class CreateAgencyUI {}
+
+class CreateAgencyController {
+    + CreateAgencyController(agencyRepository)
+    + getAgencyRepository()
+    + createAgency(designation, state, district,\ncity, address,\nemail, phoneNumber)
+
+}
+
+class AgencyRepository {}
+
+class Agency {
+    - String designation
+    - String state
+    - String district
+    - String city
+    - String address
+    - String email
+    - long phoneNumber
+    - int vat
+
+    + create(designation, state, district, city, address, email, phoneNumber)
+}
+
+class SystemAdministrator {
+    - phoneNumber
+    - email
+    - password
+}
+
+class CreateAccountUI {}
+
+class CreateAccountController {
+    + CreateAccountController(accountRepository)
+    + getAccountRepository()
+    + createAccount(name, passportCardNumber, taxNumber,\naddress, email, telephoneNumber,state, district, city)
+
+}
+
+class AccountRepository {
+    -email
+}
+
+class Account {
+    - String name
+    - String passaportCardNumber
+    - Integer taxNumber
+    - String address
+    - String email
+    - String telephoneNumber
+    - String state
+    - String district
+    - String city
+
+    + create(name, passportCardNumber, taxNumber,\naddress, email, telephoneNumber,state, district, city)
+}
+
+class UnregistedUser {}
+
+class CreateTransactionRequestUI {
+  +getAgents()
+}
+
+class UserSession {
+  - String email
+  +getUserEmail()
+}
+
+class ApplicationSession {
+  -appSession
+  +getCurrentSession()
+  +getInstance()
+}
+
+class User{
+    -String email
+}
+
+class Agent{
+    -String email
+}
+
+class Request{
+    -String adress
+    -String area
+    -String city
+    -String state
+    -float price
+    -float distanceFromCenter
+}
+
+class CreateTransactionRequestController {
+  +getAgents()
+  +getUserFromSession()
+  +createLandRequest(adress, area, price, distanceFromCenter, city, state)
+  +createHouseRequest(adress, area, price, distanceFromCenter, city, state)
+  +createAppartmentRequest(adress, area, price, distanceFromCenter, city, state)
+}
+
+class EmployeeRepository {
+  +getAgents()
+}
+
+class UserSession {
+  - String email
+  +getUserEmail()
+}
+
+class RequestRepository {
+  +getInstances()
+  +validateRequest(business, user, land, agent)
+  +addRequest(request)
+}
+
+
+MenuUI --> CreateAccountUI
+
+MenuUI --> CreateAgencyUI
+
+MenuUI --> CreateTransactionRequestUI
+
+MenuUI --> DisplayPropertiesUI
+
+MenuUI --> RegisterEmployeeUI
+
+Repositories -> Repositories : instance
+
+DisplayPropertiesUI ..> DisplayPropertiesController
+
+DisplayPropertiesController ..> Repositories : repositories
+
+Repositories --> "1" PropertiesRepository
+
+DisplayPropertiesController ..> Property : PropertiesRepository
+
+Property --> UnregisteredUser : seenBy
+
+CreateTransactionRequestUI ..> CreateTransactionRequestController
+
+CreateTransactionRequestController ..> Repositories : repositories
+
+Repositories --> "1" TransactionRequestRepository
+
+CreateTransactionRequestController ..> TransactionRequest : TransactionRequestRepository
+
+CreateTransactionRequestUI --> Employee : acessedBy
+
+RegisterEmployeeUI ..> RegisterEmployeeController
+
+RegisterEmployeeController ..> Repositories : repositories
+
+Repositories --> "1" AgencyRepository
+
+AgencyRepository --> "*" Agency
+
+Repositories --> "1" RoleRepository
+
+RoleRepository --> "*" Role
+
+Repositories --> "1" EmployeeRepository
+
+EmployeeRepository --> "*" Employee
+
+Repositories --> "1" AuthenticationRepository
+
+RegisterEmployeeController ..> Employee : EmployeeRepository
+
+Employee --> SystemAdministrator : createdBy
+
+PasswordGenerator .-> Employee : password
+
+CreateAgencyUI ..> CreateAgencyController
+
+CreateAgencyController ..> Repositories : repositories
+
+Repositories --> "1" StoreRepository
+
+CreateAgencyController ..> Agency : AgencyRepository
+
+Agency --> SystemAdministrator : createdBy
+
+CreateAccountUI ..> CreateAccountController
+
+CreateAccountController ..> Repositories : repositories
+
+Repositories --> "1" AccountRepository
+
+AccountRepository --> AccountRepository : verifyIfIUserExists
+
+CreateAccountController ..> Account : AccountRepository
+
+Account --> UnregistedUser : createdBy
+
+User->Owner:canBe
+
+CreateTransactionRequestUI..> CreateTransactionRequestController
+
+CreateTransactionRequestUI--> Agent
+
+CreateTransactionRequestController-> Request
+
+CreateTransactionRequestController..> Repositories: Repositories
+
+CreateTransactionRequestController..>UserSession
+
+CreateTransactionRequestController..>ApplicationSession
+
+Repositories -> Repositories : instance
+
+Repositories --> UserRepository
+
+Repositories --> RequestRepository
+
+Repositories --> EmployeeRepository
+
+Owner --> land: owns
+
+Owner -> CreateTransactionRequestUI: requests
+
+Owner --> House : owns
+
+Owner --> Apartment : owns
+
+@enduml

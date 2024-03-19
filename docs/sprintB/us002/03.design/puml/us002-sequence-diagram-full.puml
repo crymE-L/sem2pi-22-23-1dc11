@@ -1,0 +1,83 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Owner" as owner
+actor "Agent" as agent
+
+participant ":CreateTransactionRequestUI" as UI
+participant ":CreateTransactionRequestController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "TransactionRequestRepository:\ntransactionRequestRepository" as TransactionRequestRepository
+participant "transactionRequest\n:TransactionRequest" as TRANSACTIONREQUEST
+
+activate owner
+	owner -> agent : asks to make a sale announcement
+
+	activate agent
+		agent -> UI : asks to create a sale announcement
+
+		activate UI
+			UI --> CTRL** : create
+
+			UI --> agent : asks for necessary data
+		deactivate UI
+
+		agent --> owner : requests necessary data
+
+		owner -> agent : provides the data
+
+		agent -> UI : sends necessary data
+
+		activate UI
+			UI -> CTRL : createTransactionRequest(owner, buyer, agent, price, commission, accepted)
+
+			activate CTRL
+				CTRL -> RepositorySingleton : getInstance()
+
+				activate RepositorySingleton
+
+                    RepositorySingleton --> CTRL: repositories
+
+                deactivate RepositorySingleton
+
+                CTRL -> PLAT : getTransactionRequestRepository()
+
+				activate PLAT
+
+                    PLAT --> CTRL : transactionRequestRepository
+
+                deactivate PLAT
+
+				CTRL -> TransactionRequestRepository : createTransactionRequest(owner, buyer, agent, price, commission, accepted)
+			deactivate CTRL
+
+			activate TransactionRequestRepository
+				TransactionRequestRepository -> TRANSACTIONREQUEST**: create(owner, buyer, agent, price, commission, accepted)
+				TransactionRequestRepository --> TransactionRequestRepository : addTransactionRequest(transactionRequest)
+
+				activate TransactionRequestRepository
+					TransactionRequestRepository -> TransactionRequestRepository : validateTransactionRequest(transactionRequest)
+
+					activate TransactionRequestRepository
+						TransactionRequestRepository --> TransactionRequestRepository
+					deactivate TransactionRequestRepository
+
+					TransactionRequestRepository --> TransactionRequestRepository
+				deactivate TransactionRequestRepository
+
+				TransactionRequestRepository --> CTRL : transactionRequest
+			deactivate TransactionRequestRepository
+
+			CTRL --> UI: transactionRequest
+
+			UI --> agent : displays operation success
+		deactivate UI
+
+		agent --> owner : communicates success
+	deactivate agent
+deactivate owner
+
+@enduml

@@ -1,0 +1,57 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Property {
+	- photos
+	- area
+	- distanceFromCenter
+	- price
+	- owner
+	- agent
+	- visitRequests
+	- address
+}
+
+class Habitation {
+	- bedrooms
+	- bathrooms
+	- parkingSpaces
+	- hasCentralHeating
+	- hasAirConditioning
+}
+
+class House {
+	- hasBasement
+	- hasInhabitableLoft
+	- sunExposure
+}
+
+class State {
+    - state
+}
+
+class District {
+    - district
+}
+
+class City {
+    - city
+}
+
+Property "*" -- "1" Habitation : can be >
+Habitation "1" -- "1" House : can be >
+
+Property "1" -- "1" State: Has >
+Property "1" -- "1" District : Has >
+Property "1" -- "1" City : Has >
+
+@enduml

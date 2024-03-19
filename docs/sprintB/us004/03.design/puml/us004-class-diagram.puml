@@ -1,0 +1,109 @@
+@startuml
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class Owner{
+    -String email
+    -String phone
+}
+
+class CreateRequestUI {}
+
+class CreateRequestController {}
+
+class RequestRepository {}
+
+class EmployeeRepository {}
+
+class Request{
+    -String adress
+    -String area
+    -String city
+    -String state
+    -float price
+    -float distanceFromCenter
+}
+
+class land {}
+
+class Repositories {
+    - Repositories
+    + getInstance() : Repositories
+    + getUserRepository()
+}
+
+  Owner --> House : owns
+  Owner --> Apartment : owns
+
+class House {}
+
+class Apartment {}
+
+class UserRepository{
+  -user
+  +getUserEmail()
+}
+
+class ApplicationSession {}
+
+class User{
+    -String email
+}
+
+class Agent{
+    -String email
+}
+
+class CreateRequestUI {
+  +getAgents()
+}
+
+class CreateRequestController {
+  +getAgents()
+  +getUserFromSession()
+  +createLandRequest(adress, area, price, distanceFromCenter, city, state)
+  +createHouseRequest(adress, area, price, distanceFromCenter, city, state)
+  +createAppartmentRequest(adress, area, price, distanceFromCenter, city, state)
+}
+
+class RequestRepository {
+  +getInstances()
+  +validateRequest(business, user, land, agent)
+  +addRequest(request)
+}
+
+class EmployeeRepository {
+  +getAgents()
+}
+
+
+class UserSession {
+  - String email
+  +getUserEmail()
+}
+
+class ApplicationSession {
+  -appSession
+  +getCurrentSession()
+  +getInstance()
+}
+
+User->Owner:canBe
+CreateRequestUI..> CreateRequestController
+CreateRequestUI--> Agent
+CreateRequestController-> Request
+CreateRequestController..> Repositories: Repositories
+CreateRequestController..>UserSession
+CreateRequestController..>ApplicationSession
+Repositories -> Repositories : instance
+Repositories -down-> UserRepository
+Repositories -down-> RequestRepository
+Repositories -down-> EmployeeRepository
+Owner-down-> land: owns
+Owner-> CreateRequestUI: requests
+
+@enduml

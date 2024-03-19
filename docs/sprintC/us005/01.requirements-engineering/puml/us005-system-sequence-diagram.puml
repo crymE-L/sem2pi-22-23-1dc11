@@ -1,0 +1,32 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "System administrator" as SystemAdmin
+participant ":System" as System
+
+activate SystemAdmin
+
+    SystemAdmin -> System : Asks to create a store
+    activate System
+
+    System --> SystemAdmin : Requests data
+    deactivate System
+
+    SystemAdmin -> System : Types requested data (designation, address, state, district,\n city, email, phone number)
+    activate System
+
+    System --> SystemAdmin : Shows the data and requests a confirmation
+    deactivate System
+
+    SystemAdmin -> System : Confirms the data
+    activate System
+
+    System --> SystemAdmin : Informs operation success
+
+    deactivate System
+
+@enduml

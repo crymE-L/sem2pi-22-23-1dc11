@@ -1,0 +1,35 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Unregistered_User{
+   name
+   passportCardNumber
+   address
+   taxNumber
+   email
+   telephoneNumber
+}
+
+class System {}
+
+class State {}
+
+class District {}
+
+class City {}
+
+Unregistered_User "1" -- "1" System: Sends >
+Unregistered_User "1" -- "*"State: Select >
+Unregistered_User "1" -- "*" District : Select >
+Unregistered_User "1" -- "*" City : Select >
+
+@enduml

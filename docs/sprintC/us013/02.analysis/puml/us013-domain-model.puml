@@ -1,0 +1,60 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class NetworkManager {
+	- name
+	- email
+	- phone
+}
+
+class AgencyNetwork {
+	- name
+	- address
+	- email
+	- phone
+	- agencies
+}
+
+class Agency {
+	- name
+	- vat
+	- location
+	- email
+	- phone
+	- employees
+	- manager
+}
+
+class Employee {
+	- passport
+	- vat
+	- address
+	- phone
+	- agency
+}
+
+class Property {
+	- photos
+	- area
+	- distanceFromCenter
+	- price
+	- owner
+	- agent
+	- visitRequests
+	- address
+}
+
+NetworkManager "1" -- "1" AgencyNetwork : has >
+AgencyNetwork "1" -- "*" Agency : has >
+NetworkManager "1" -- "*" Employee : list >
+Agency "1" -- "*" Employee : has >
+Employee "1" -- "*" Property: Can publishes >
+
+@enduml

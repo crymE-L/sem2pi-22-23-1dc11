@@ -1,0 +1,113 @@
+@startuml
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class CreateAgencyUI {}
+
+class CreateAgencyController {
+    + CreateAgencyController(agencyRepository)
+    + getAgencyRepository()
+    + createAgency(designation, state, district,\ncity, address,\nemail, phoneNumber)
+
+}
+
+class AgencyRepository {}
+
+class Agency {
+    - String designation
+    - String state
+    - String district
+    - String city
+    - String address
+    - String email
+    - long phoneNumber
+    - int vat
+
+    + create(designation, state, district, city, address, email, phoneNumber)
+}
+
+class SystemAdministrator {
+    - phoneNumber
+    - email
+    - password
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getAgencyRepository()
+}
+
+Repositories -> Repositories : instance
+
+CreateAgencyUI .> CreateAgencyController
+
+CreateAgencyController .> Repositories : repositories
+
+Repositories --> "1" AgencyRepository
+
+CreateAgencyController ..> Agency : AgencyRepository
+
+Agency --> SystemAdministrator : createdBy
+
+@enduml
+@startuml
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class CreateAgencyUI {}
+
+class CreateAgencyController {
+    + CreateAgencyController(agencyRepository)
+    + getAgencyRepository()
+    + createAgency(designation, state, district,\ncity, address,\nemail, phone number)
+
+}
+
+class AgencyRepository {}
+
+class Agency {
+    - String designation
+    - String state
+    - String district
+    - String city
+    - String address
+    - String email
+    - String phoneNumber
+
+    + create(designation, state, district, city, address, email, phoneNumber)
+}
+
+class SystemAdministrator {
+    - phoneNumber
+    - email
+    - password
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getAgencyRepository()
+}
+
+Repositories -> Repositories : instance
+
+CreateAgencyUI .> CreateAgencyController
+
+CreateAgencyController .> Repositories : repositories
+
+Repositories --> "1" StoreRepository
+
+CreateAgencyController ..> Agency : AgencyRepository
+
+Agency --> SystemAdministrator : createdBy
+
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Unregisted User" as Unregisted_User
+participant ":System" as System
+
+Unregisted_User -> System : Asks to create an account
+activate System
+
+System --> Unregisted_User :Requests data
+deactivate System
+
+Unregisted_User -> System: Types requested data (name, passport card, tax number,\nemail, telephone number)
+activate System
+alt optional
+    Unregisted_User -> System : Optional data (state, district, city)
+end
+System --> Unregisted_User : Shows the data and requests a confirmation
+deactivate System
+
+Unregisted_User -> System : Confirms the data
+activate System
+
+System --> Unregisted_User : Informs operation success
+deactivate System
+@enduml

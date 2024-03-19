@@ -1,0 +1,49 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+class CreateAccountUI {}
+
+class CreateAccountController {
+    + CreateAccountController(accountRepository)
+    + getAccountRepository()
+    + createAccount(name, passportCardNumber, taxNumber,\naddress, email, telephoneNumber,state, district, city)
+
+}
+
+class Repositories {}
+
+class AccountRepository {
+    -email
+}
+
+class Account {
+    - String name
+    - String passaportCardNumber
+    - Integer taxNumber
+    - String address
+    - String email
+    - String telephoneNumber
+    - String state
+    - String district
+    - String city
+
+    + create(name, passportCardNumber, taxNumber,\naddress, email, telephoneNumber,state, district, city)
+}
+
+class UnregistedUser {}
+
+CreateAccountUI .> CreateAccountController
+CreateAccountController .> Repositories : repositories
+Repositories -> Repositories : instance
+Repositories --> "1" AccountRepository
+AccountRepository -> AccountRepository : verifyIfIUserExists
+CreateAccountController ..> Account : AccountRepository
+Account --> UnregistedUser : createdBy
+
+@enduml

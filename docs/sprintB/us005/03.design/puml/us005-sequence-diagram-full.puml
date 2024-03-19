@@ -1,0 +1,89 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "System Administrator" as ADM
+participant ":CreateAgencyUI" as UI
+participant ":CreateAgencyController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "AgencyRepository:\nagencyRepository" as AgencyRepository
+participant "agency\n:Agency" as AGENCY
+
+activate ADM
+
+        ADM -> UI : asks to create a new store
+
+        activate UI
+
+            UI -> CTRL** : create
+
+            UI --> ADM : requests data
+
+        deactivate UI
+
+    ADM -> UI : types requested data (designation, state, district,\n city, address, email, phone number, vat)
+
+    activate UI
+
+        UI -> CTRL : createAgency(designation, state, district,\n city, address, email, phone number, vat)
+
+            activate CTRL
+
+                CTRL -> RepositorySingleton : getInstance()
+
+                activate RepositorySingleton
+
+                    RepositorySingleton --> CTRL: repositories
+
+                deactivate RepositorySingleton
+
+                CTRL -> PLAT : getStoreRepository()
+
+                activate PLAT
+
+                    PLAT --> CTRL : storeRepository
+
+                deactivate PLAT
+
+                CTRL -> AgencyRepository : createAgency(designation, state, district,\n city, address, email, phone number, vat)
+
+            deactivate CTRL
+
+            activate AgencyRepository
+
+                AgencyRepository -> AGENCY** : create(designation, state, district,\n city, address, email, phone number, vat)
+                AgencyRepository -> AgencyRepository : addAgency (agency)
+
+                activate AgencyRepository
+
+                    AgencyRepository -> AgencyRepository : validateAgency(agency)
+
+                    activate AgencyRepository
+
+                        AgencyRepository --> AgencyRepository
+
+                    deactivate AgencyRepository
+
+                    AgencyRepository --> AgencyRepository
+
+                deactivate AgencyRepository
+
+                AgencyRepository --> CTRL : agency
+
+            deactivate AgencyRepository
+
+            CTRL --> UI: agency
+
+            deactivate CTRL
+
+            UI --> ADM: displays operation success
+
+    deactivate UI
+
+deactivate ADM
+
+@enduml

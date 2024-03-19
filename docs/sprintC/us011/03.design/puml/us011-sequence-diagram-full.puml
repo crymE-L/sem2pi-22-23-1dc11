@@ -1,0 +1,74 @@
+@startuml
+actor Agent
+participant "User Interface" as UI
+participant "PurchaseOrderController" as Controller
+participant "Repository" as RepoManager
+participant "PurchaseOrderRepository" as OrderRepository
+participant "EmailService" as EmailService
+participant Owner
+
+activate Agent
+Agent -> UI: asks to list purchase orders
+activate UI
+UI --> Controller**: create
+UI --> Controller: getPurchaseOrder()
+activate Controller
+Controller --> RepoManager: getPurchaseOrderRepository()
+activate RepoManager
+RepoManager --> OrderRepository: getPurchaseOrders()
+activate OrderRepository
+OrderRepository --> RepoManager: purchaseOrderList
+deactivate OrderRepository
+RepoManager --> Controller: purchaseOrderList
+deactivate RepoManager
+Controller --> UI: purchaseOrderList
+deactivate Controller
+Loop till the agent is satisfied
+UI --> Agent: display purchaseOrderList
+deactivate UI
+
+Agent -> UI: select purchase order
+activate UI
+UI -> Controller: getOrderDetails(order)
+activate Controller
+Controller -> RepoManager: getOrderDetails(order)
+activate RepoManager
+RepoManager -> OrderRepository: getOrderDetails(order)
+activate OrderRepository
+OrderRepository --> RepoManager: purchaseOrderDetails
+deactivate OrderRepository
+RepoManager --> Controller: purchaseOrderDetails
+deactivate RepoManager
+Controller --> UI: purchaseOrderDetails
+deactivate Controller
+UI -> Agent: display purchaseOrderDetails
+deactivate UI
+
+Agent -> UI: accept/decline purchase order
+activate UI
+UI -> Controller: updatePurchaseOrderStatus()
+activate Controller
+Controller -> RepoManager: updatePurchaseOrderStatus()
+activate RepoManager
+RepoManager -> OrderRepository: updatePurchaseOrderStatus()
+activate OrderRepository
+OrderRepository --> RepoManager: update success
+deactivate OrderRepository
+RepoManager --> Controller: update success
+deactivate RepoManager
+Controller -> EmailService: send notification
+activate EmailService
+EmailService -> Owner: send email notification
+activate Owner
+Owner --> EmailService: acknowledgement
+deactivate Owner
+EmailService --> Controller: notification sent
+deactivate EmailService
+Controller --> UI: confirmation
+deactivate Controller
+UI -> Agent: confirmation
+deactivate UI
+deactivate Agent
+end
+@enduml
+

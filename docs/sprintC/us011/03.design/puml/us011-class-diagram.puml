@@ -1,0 +1,79 @@
+   @startuml
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class DisplayPurchaseOrdersUI {}
+
+class CreateTransactionRequestController {
+    + RegisterEmployeeController(agencyRepository, roleRepository)
+    + getAgencyRepository()
+    + getRoleRepository()
+    + registerEmployee(name, passport's card number, tax number,\naddress, email address, telephone number, agency, role)
+
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getTransactionRequestRepository()
+    + getEmployeeRepository();
+}
+
+class EmployeeRepository {}
+
+
+class Employee {
+    - String name
+    - String passport's card number
+    - String tax number
+    - String address
+    - String email address
+    - String telephone number
+    - Integer phone number
+    - String agency
+    - String role
+    - String password
+
+    + create(name, passport's card number, tax number,\naddress, email address, telephone number, agency, role, password)
+}
+
+class TransactionRequestRepository {}
+
+
+
+class PurchaseOrder {
+    - Person owner
+    - Person buyer
+    - Employee agent
+    - float price
+    - float commission
+    - boolean accepted
+
+    + create(owner, buyer, agent,\naddress, email address, telephone number, agency, role, password)
+}
+
+
+Repositories -> Repositories : instance
+
+DisplayPurchaseOrdersUI .> CreateTransactionRequestController
+
+CreateTransactionRequestController .> Repositories : repositories
+
+Repositories --> "1" EmployeeRepository
+
+EmployeeRepository --> "*" Employee
+
+Repositories --> "1" TransactionRequestRepository
+
+TransactionRequestRepository --> "*" PurchaseOrder
+
+CreateTransactionRequestController ..> PurchaseOrder : TransactionRequestRepository
+
+
+
+
+@enduml

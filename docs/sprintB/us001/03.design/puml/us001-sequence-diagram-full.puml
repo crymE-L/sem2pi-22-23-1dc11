@@ -1,0 +1,67 @@
+@startuml
+ skinparam monochrome true
+ skinparam packageStyle rectangle
+ skinparam shadowing false
+
+ autonumber
+
+ actor "Unregistered User" as UU
+ participant ":DisplayPropertiesUI" as UI
+ participant ":DisplayPropertiesController" as CTRL
+ participant ":Repositories" as RepositorySingleton
+ participant "repositories\n:Repositories" as PLAT
+ participant "PropertiesRepository:\npropertiesRepository" as PropertiesRepository
+
+ activate UU
+
+         UU -> UI : asks to display listed properties
+
+         activate UI
+
+             UI -> CTRL** : create
+
+             activate CTRL
+
+                 opt Selects the type of business, property, number of rooms, price, city and/or state
+                     UU->CTRL : Selects the type(s)
+
+                     opt Filters by price (or more) and sorts by ascending or descending
+                     UU->CTRL : Selects the type(s)
+                     end
+
+                 end
+                 CTRL -> RepositorySingleton : getInstance()
+
+                 activate RepositorySingleton
+
+                     RepositorySingleton --> CTRL: repositories
+
+                 deactivate RepositorySingleton
+
+                 CTRL -> PLAT : getPropertiesRepository()
+
+                 activate PLAT
+
+                     PLAT --> CTRL : propertiesRepository
+
+                 deactivate PLAT
+
+                 CTRL -> PropertiesRepository : getProperties()
+
+                    activate PropertiesRepository
+
+                    PropertiesRepository --> CTRL : properties
+
+                 deactivate PropertiesRepository
+
+             CTRL --> UI: properties
+
+             deactivate CTRL
+
+             UI --> UU: display listed properties
+
+         deactivate UI
+
+ deactivate UU
+
+ @enduml

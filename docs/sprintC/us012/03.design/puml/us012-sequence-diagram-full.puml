@@ -1,0 +1,228 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "System Administrator" as ADM
+participant ":LegacyFileUI" as UI
+participant ":LegacyFileController" as CTRL
+participant "fileReadingSystem:\nFileReadingSystem" as FileReading
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "personRepository:\nPersonRepository" as PersonRepository
+participant "person\n:Person" as PERSON
+participant "propertyRepository:\nPropertyRepository" as PropertyRepository
+participant "property\n:Property" as PROPERTY
+participant "agencyRepository:\nAgencyRepository" as AgencyRepository
+participant "agency\n:Agency" as AGENCY
+participant "announcementRepository:\nAnnouncementRepository" as AnouncementRepository
+participant "announcement\n:Announcement" as ANNOUNCEMENT
+participant "transactionRepository:\nTransactionRepository" as TransactionRepository
+participant "transaction\n:Transaction" as TRANSACTION
+
+
+activate ADM
+
+        ADM -> UI : asks to import a file from a legacy system
+
+        activate UI
+
+            UI -> CTRL** : create
+
+            UI --> ADM : requests data
+
+    ADM -> UI : types requested data (filePath)
+
+    UI --> ADM : shows requested data and asks submits
+
+    ADM -> UI : submits requested data (filePath)
+
+    UI -> CTRL: validateFile(filePath)
+
+        activate CTRL
+
+            CTRL -> CTRL : getFile(filePath)
+
+            activate CTRL
+
+            CTRL --> CTRL : file
+
+
+            deactivate CTRL
+
+            CTRL -> CTRL : validateFile(file)
+
+            activate CTRL
+
+            CTRL --> CTRL : true/false
+
+            deactivate CTRL
+
+            CTRL --> UI : true/false
+
+        alt The file is empty or its content is not in the requested format.
+
+            UI --> ADM : Shows a message saying that the file is empty or \nits content is not in the desired format
+
+        else else
+
+            UI -> CTRL : readInformation()
+
+                loop each line
+
+                    CTRL -> FileReading : readLineInformation()
+
+                    activate FileReading
+
+                    FileReading --> CTRL : lineInformation
+
+                    deactivate FileReading
+
+                    CTRL -> RepositorySingleton : getInstance()
+
+                    activate RepositorySingleton
+
+                    RepositorySingleton --> CTRL: repositories
+
+                    deactivate RepositorySingleton
+
+                    CTRL -> PLAT : getPersonRepository()
+
+                    activate PLAT
+
+                          PLAT --> CTRL: personRepository
+
+                    deactivate PLAT
+
+                    CTRL -> PersonRepository : addPerson(name, passport, vat, \n email, phoneNumber)
+
+                    activate PersonRepository
+
+                    PersonRepository -> PERSON** : createPerson(name, passport, vat, \n email, phoneNumber)
+
+                    PersonRepository -> PersonRepository : addPerson
+
+                    activate PersonRepository
+
+                    PersonRepository --> PersonRepository
+
+                    deactivate  PersonRepository
+
+                    PersonRepository --> CTRL : personObject
+
+                    deactivate PersonRepository
+
+                    CTRL -> PLAT : getPropertyRepository()
+
+                    activate PLAT
+
+                    PLAT --> CTRL: PropertyRepository
+
+                    deactivate PLAT
+
+                    CTRL -> PropertyRepository : addProperty(typeOfProperty, area, location, distanceFromCenter, numberOfBedrooms,\n numberOfBathrooms, parkingSpaces, hasCentralHeating, hasAirConditioning, basement, loft, sunExposure,\n price, businessType)
+
+                    activate PropertyRepository
+
+                    PropertyRepository -> PROPERTY** : createProperty(typeOfProperty, area, location, distanceFromCenter, numberOfBedrooms,\n numberOfBathrooms, parkingSpaces, hasCentralHeating, hasAirConditioning, basement, loft, sunExposure,\n price, businessType)
+
+                    PropertyRepository -> PropertyRepository : addProperty
+
+                     activate PropertyRepository
+
+                    PropertyRepository --> PropertyRepository
+
+                    deactivate  PropertyRepository
+
+                    PropertyRepository --> CTRL : propertyObject
+
+                    deactivate PropertyRepository
+
+                    CTRL -> PLAT : getAgencyRepository()
+
+                    activate PLAT
+
+                    PLAT --> CTRL : agencyRepository
+
+                    deactivate PLAT
+
+                    CTRL -> AgencyRepository : addAgency(name, location, phoneNumber, email)
+
+                    activate AgencyRepository
+
+                    AgencyRepository -> AGENCY** : createAgency(name, location, phoneNumber, email)
+
+                    AgencyRepository -> AgencyRepository : addAgency
+
+                    activate AgencyRepository
+
+                    AgencyRepository --> AgencyRepository
+
+                    deactivate  AgencyRepository
+
+                    CTRL -> PLAT : getAnnouncementRepository()
+
+                    deactivate AgencyRepository
+
+                    activate PLAT
+
+                    PLAT --> CTRL : announcementRepository
+
+                    deactivate PLAT
+
+                    CTRL -> AnouncementRepository : addAnnouncement(personObject, propertyObject, price, commission, contractDuration, date)
+
+                    activate AnouncementRepository
+
+                    AnouncementRepository -> ANNOUNCEMENT** : createAnnouncement(personObject, propertyObject, price, commission, contractDuration, date)
+
+                    AnouncementRepository -> AnouncementRepository : addAnnouncement
+
+                    activate AnouncementRepository
+
+                    AnouncementRepository --> AnouncementRepository
+
+                    deactivate  AnouncementRepository
+
+                    CTRL -> PLAT : getTransactionRepository()
+
+                    deactivate AnouncementRepository
+
+                    activate PLAT
+
+                    PLAT --> CTRL : transactionRepository
+
+                    deactivate PLAT
+
+                    CTRL -> TransactionRepository : addTransaction(personObject, dateOfSale, propertyObject, price)
+
+                    activate TransactionRepository
+
+                    TransactionRepository -> TRANSACTION** : createTransaction(personObject, dateOfSale, propertyObject, price)
+
+                    TransactionRepository -> TransactionRepository : addTransaction
+
+                    activate TransactionRepository
+
+                    TransactionRepository --> TransactionRepository
+
+                    deactivate  TransactionRepository
+
+                end
+                    deactivate TransactionRepository
+
+                CTRL --> UI : operation success
+
+                deactivate CTRL
+
+            UI --> ADM : displays operation success
+
+            deactivate UI
+
+        end
+
+deactivate ADM
+
+@enduml

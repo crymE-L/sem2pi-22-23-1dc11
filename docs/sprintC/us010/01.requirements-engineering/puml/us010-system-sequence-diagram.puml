@@ -1,0 +1,41 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Client" as Client
+participant ":System" as System
+
+activate Client
+
+	activate System
+
+		Client -> System : Asks to list properties
+
+		System --> Client : Sends list of properties
+
+		Client -> System : Selects property that wants to buy
+
+		alt Client has previous submission for this property
+			System --> Client : Sends error message
+		else
+			loop While the amount is not valid
+				System --> Client : Asks for proposed amount
+
+				Client -> System : Submits the proposed amount
+			end
+
+			alt Has previous order amount submission?
+				System --> Client : Sends message stating there's another submission
+
+				System --> Client : Sends success message
+			end
+		end
+
+	deactivate System
+
+deactivate Client
+
+@enduml

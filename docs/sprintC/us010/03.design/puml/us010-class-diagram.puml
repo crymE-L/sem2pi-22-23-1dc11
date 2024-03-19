@@ -1,0 +1,100 @@
+@startuml
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class PropertyRepository {
+	- propertiesList
+}
+
+class TransactionRepository {
+	- transactionsList
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getAgencyRepository()
+    + getAgencyNetworkRepository()
+    + getEmployeeRepository()
+    + getPropertyRepository()
+    + getRequestsRepository()
+    + getTransactionsRepository()
+    + getRoleRepository()
+    + getUsersRepository()
+}
+
+class Person {
+	- name
+	- email
+	- password
+	- roles
+	- phoneNumber
+}
+
+class Property {
+	- name
+	- address
+	- area
+	- distanceFromCenter
+	- price
+	- city
+	- district
+	- state
+	- owner
+	- businessType
+	- photos
+}
+
+class Transaction {
+	- owner
+	- buyer
+	- price
+	- property
+	- approved
+	- reviewed
+}
+
+class PropertyMapper {
+	+ toDto(property)
+	+ toDtoList(properties)
+}
+
+class ApplicationSession {
+    -currentUser
+    +getCurrentUser()
+}
+
+class DisplayPropertiesUI {
+	+ run()
+	- displayAllProperties
+	- displayFilteredProperties
+	- placePurchaseOrder
+}
+
+class TransactionController {
+	- repository
+	+ create(owner_id, buyer_id, price, property_id)
+	+ hasTransactionWithAmount(property_id, price)
+	- hasPreviousRequest(property, buyer)
+}
+
+Repositories -> Repositories : instance
+
+DisplayPropertiesUI .> TransactionController
+
+TransactionController ..> Repositories : repositories
+Repositories --> "1" TransactionRepository
+Repositories --> "1" PropertyRepository
+
+TransactionController ..> ApplicationSession : applicationSession
+TransactionController ..> PropertyMapper : propertyMapper
+PropertyMapper ..> Property
+
+Transaction --> Person : has
+Transaction --> Property : has
+
+@enduml

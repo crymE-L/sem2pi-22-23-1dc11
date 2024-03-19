@@ -1,0 +1,59 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+class DisplayPropertiesUI {}
+
+class DisplayPropertiesController {
+    +CreateDisplayPropertiesController()
+    +getPropertiesRepository()
+}
+
+class Repositories {
+    -Repositories
+    +getInstance() : Repositories
+    +getPropertiesRepository()
+}
+
+class PropertiesRepository {
+    -Properties
+}
+
+class UnregisteredUser {}
+
+class Property {
+    +address
+    +photos
+    +area
+    +distanceFromCenter
+    +price
+    +parish
+    +city
+    +state
+    +type
+    +owner
+    +agent
+    +visitRequests
+    +commission
+}
+
+Repositories -> Repositories : instance
+
+DisplayPropertiesUI .> DisplayPropertiesController
+
+DisplayPropertiesController .> Repositories : repositories
+
+Repositories --> "1" PropertiesRepository
+
+DisplayPropertiesController ..> Property : PropertiesRepository
+
+Property --> UnregisteredUser : seenBy
+
+@enduml

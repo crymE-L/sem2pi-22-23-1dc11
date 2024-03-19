@@ -1,0 +1,278 @@
+@startuml
+title Submit Request for Listing Property Sale or Rent
+
+actor Owner
+
+participant CreateRequestUI as UI_CTRL
+participant CreateRequestController as REQ_CTRL
+participant ":Repositories" as REPO
+participant "repositories\n :Repositories" as REP
+participant "employeeRepository\n :EmployeeRepository" as EMP_REP
+
+Owner -> UI_CTRL: Asks to create request
+activate UI_CTRL
+UI_CTRL --> Owner: shows options (sale or rent) and asks to select one
+deactivate UI_CTRL
+activate Owner
+Owner -> UI_CTRL: selects one of the options
+deactivate Owner
+activate UI_CTRL
+UI_CTRL -> REQ_CTRL: getAgents()
+deactivate UI_CTRL
+activate REQ_CTRL
+    REQ_CTRL-> REPO: getInstances()
+    deactivate REQ_CTRL
+    activate REPO
+        REPO --> REQ_CTRL: repositories
+            deactivate REPO
+        activate REQ_CTRL
+    REQ_CTRL-> REP: getEmployeeRepository()
+    deactivate REQ_CTRL
+    activate REP
+        REP --> REQ_CTRL: employeeRepository
+            deactivate REP
+        activate REQ_CTRL
+    REQ_CTRL-> EMP_REP: getAgents()
+    deactivate REQ_CTRL
+    activate EMP_REP
+        EMP_REP--> REQ_CTRL: agentsList
+            deactivate EMP_REP
+        activate REQ_CTRL
+    REQ_CTRL--> UI_CTRL: agentsList
+    deactivate REQ_CTRL
+            activate UI_CTRL
+deactivate REQ_CTRL
+UI_CTRL--> Owner: Display available agents
+deactivate UI_CTRL
+activate Owner
+Owner-> UI_CTRL: Selects one agent
+deactivate Owner
+activate UI_CTRL
+UI_CTRL--> Owner: Select a type of property (Land, house or appartment)
+deactivate UI_CTRL
+activate Owner
+Owner-> UI_CTRL: Selects one type
+deactivate Owner
+activate UI_CTRL
+UI_CTRL--> Owner: Requests data
+deactivate UI_CTRL
+activate Owner
+Owner-> UI_CTRL: Submits data
+deactivate Owner
+activate UI_CTRL
+alt Land
+
+UI_CTRL->REQ_CTRL: createLandRequest(adress, area, price, distanceFromCenter, city, state)
+deactivate UI_CTRL
+activate REQ_CTRL
+REQ_CTRL-> REQ_CTRL: getUserFromSession()
+REQ_CTRL-> ":ApplicationSession": getInstance()
+deactivate REQ_CTRL
+
+activate ":ApplicationSession"
+":ApplicationSession"-->REQ_CTRL: appSession
+deactivate ":ApplicationSession"
+activate REQ_CTRL
+REQ_CTRL-> "appSession\n:ApplicationSession":getCurrentSession()
+deactivate REQ_CTRL
+
+activate "appSession\n:ApplicationSession"
+"appSession\n:ApplicationSession"-->REQ_CTRL:CurrentSession
+deactivate "appSession\n:ApplicationSession"
+activate REQ_CTRL
+REQ_CTRL->  "currentSession\n UserSession": email = getUserEmail()
+deactivate REQ_CTRL
+
+activate "currentSession\n UserSession"
+"currentSession\n UserSession"--> REQ_CTRL: email
+deactivate "currentSession\n UserSession"
+activate REQ_CTRL
+REQ_CTRL-> REPO: getInstances()
+deactivate REQ_CTRL
+
+activate REPO
+REPO --> REQ_CTRL: repositories
+deactivate REPO
+activate REQ_CTRL
+REQ_CTRL-->"repositories\n :Repositories": getUserRepositories
+deactivate REQ_CTRL
+activate "repositories\n :Repositories"
+"repositories\n :Repositories"--> REQ_CTRL: userRepository
+deactivate "repositories\n :Repositories"
+activate REQ_CTRL
+REQ_CTRL-> "userRepository\n :UserRepository": getUser(email)
+deactivate REQ_CTRL
+activate "userRepository\n :UserRepository"
+"userRepository\n :UserRepository"--> REQ_CTRL: user
+deactivate "userRepository\n :UserRepository"
+activate REQ_CTRL
+REQ_CTRL-> "requestRepository\n RequestRepository":createRequest(business, user, land, agent)
+deactivate REQ_CTRL
+
+
+activate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"-> "request\n:Request": createRequest(request)
+"requestRepository\n RequestRepository"->"requestRepository\n RequestRepository":validateRequest(business, user, land, agent)
+activate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"->"requestRepository\n RequestRepository":addRequest
+activate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"-->"requestRepository\n RequestRepository"
+deactivate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"-->"requestRepository\n RequestRepository"
+deactivate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"--> REQ_CTRL: request
+deactivate "requestRepository\n RequestRepository"
+
+
+activate REQ_CTRL
+REQ_CTRL--> UI_CTRL: Display "Operation Successful"
+deactivate REQ_CTRL
+activate UI_CTRL
+UI_CTRL --> Owner : Display "Operation Successful"
+deactivate UI_CTRL
+
+deactivate "requestRepository\n RequestRepository"
+deactivate REQ_CTRL
+
+
+else House
+
+UI_CTRL->REQ_CTRL: createHouseRequest(adress, area, price, distanceFromCenter, city, state)
+activate REQ_CTRL
+REQ_CTRL-> REQ_CTRL: getUserFromSession()
+REQ_CTRL-> ":ApplicationSession": getInstance()
+deactivate REQ_CTRL
+activate ":ApplicationSession"
+":ApplicationSession"-->REQ_CTRL: appSession
+deactivate ":ApplicationSession"
+activate REQ_CTRL
+REQ_CTRL-> "appSession\n:ApplicationSession":getCurrentSession()
+deactivate REQ_CTRL
+activate "appSession\n:ApplicationSession"
+"appSession\n:ApplicationSession"-->REQ_CTRL:CurrentSession
+deactivate "appSession\n:ApplicationSession"
+activate REQ_CTRL
+REQ_CTRL->  "currentSession\n UserSession": email = getUserEmail()
+deactivate REQ_CTRL
+activate "currentSession\n UserSession"
+"currentSession\n UserSession"--> REQ_CTRL: email
+deactivate "currentSession\n UserSession"
+activate REQ_CTRL
+REQ_CTRL-> REPO: getInstances()
+deactivate REQ_CTRL
+activate REPO
+REPO --> REQ_CTRL: repositories
+deactivate REPO
+activate REQ_CTRL
+REQ_CTRL-->"repositories\n :Repositories": getUserRepositories
+deactivate REQ_CTRL
+activate "repositories\n :Repositories"
+"repositories\n :Repositories"--> REQ_CTRL: userRepository
+deactivate "repositories\n :Repositories"
+activate REQ_CTRL
+REQ_CTRL-> "userRepository\n :UserRepository": getUser(email)
+deactivate REQ_CTRL
+activate "userRepository\n :UserRepository"
+"userRepository\n :UserRepository"--> REQ_CTRL: user
+deactivate "userRepository\n :UserRepository"
+activate REQ_CTRL
+
+
+REQ_CTRL-> "requestRepository\n RequestRepository":createRequest(business, user, land, agent)
+deactivate REQ_CTRL
+activate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"-> "request\n:Request": createRequest(request)
+"requestRepository\n RequestRepository"->"requestRepository\n RequestRepository":validateRequest(business, user, land, agent)
+activate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"->"requestRepository\n RequestRepository":addRequest
+activate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"-->"requestRepository\n RequestRepository"
+deactivate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"-->"requestRepository\n RequestRepository"
+deactivate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"--> REQ_CTRL: request
+deactivate "requestRepository\n RequestRepository"
+activate REQ_CTRL
+REQ_CTRL--> UI_CTRL: Display "Operation Successful"
+deactivate REQ_CTRL
+activate UI_CTRL
+UI_CTRL --> Owner : Display "Operation Successful"
+deactivate UI_CTRL
+deactivate "requestRepository\n RequestRepository"
+deactivate REQ_CTRL
+
+else Appartment
+UI_CTRL->REQ_CTRL: createAppartmentRequest(adress, area, price, distanceFromCenter, city, state)
+deactivate UI_CTRL
+activate REQ_CTRL
+REQ_CTRL-> REQ_CTRL: getUserFromSession()
+REQ_CTRL-> ":ApplicationSession": getInstance()
+deactivate REQ_CTRL
+activate ":ApplicationSession"
+":ApplicationSession"-->REQ_CTRL: appSession
+deactivate ":ApplicationSession"
+activate REQ_CTRL
+REQ_CTRL-> "appSession\n:ApplicationSession":getCurrentSession()
+deactivate REQ_CTRL
+activate "appSession\n:ApplicationSession"
+"appSession\n:ApplicationSession"-->REQ_CTRL:CurrentSession
+deactivate "appSession\n:ApplicationSession"
+activate REQ_CTRL
+REQ_CTRL->  "currentSession\n UserSession": email = getUserEmail()
+deactivate REQ_CTRL
+activate "currentSession\n UserSession"
+"currentSession\n UserSession"--> REQ_CTRL: email
+deactivate "currentSession\n UserSession"
+activate REQ_CTRL
+REQ_CTRL-> REPO: getInstances()
+deactivate REQ_CTRL
+activate REPO
+REPO --> REQ_CTRL: repositories
+deactivate REPO
+activate REQ_CTRL
+REQ_CTRL-->"repositories\n :Repositories": getUserRepositories
+deactivate REQ_CTRL
+activate "repositories\n :Repositories"
+"repositories\n :Repositories"--> REQ_CTRL: userRepository
+deactivate "repositories\n :Repositories"
+activate REQ_CTRL
+REQ_CTRL-> "userRepository\n :UserRepository": getUser(email)
+deactivate REQ_CTRL
+activate "userRepository\n :UserRepository"
+"userRepository\n :UserRepository"--> REQ_CTRL: user
+deactivate "userRepository\n :UserRepository"
+activate REQ_CTRL
+REQ_CTRL-> "requestRepository\n RequestRepository":createRequest(business, user, land, agent)
+deactivate REQ_CTRL
+
+
+activate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"-> "request\n:Request": createRequest(request)
+"requestRepository\n RequestRepository"->"requestRepository\n RequestRepository":validateRequest(business, user, land, agent)
+activate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"->"requestRepository\n RequestRepository":addRequest
+activate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"-->"requestRepository\n RequestRepository"
+deactivate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"-->"requestRepository\n RequestRepository"
+deactivate "requestRepository\n RequestRepository"
+"requestRepository\n RequestRepository"--> REQ_CTRL: request
+deactivate "requestRepository\n RequestRepository"
+
+
+deactivate "requestRepository\n RequestRepository"
+activate REQ_CTRL
+REQ_CTRL--> UI_CTRL: Display "Operation Successful"
+deactivate REQ_CTRL
+activate UI_CTRL
+UI_CTRL --> Owner : Display "Operation Successful"
+deactivate UI_CTRL
+end
+
+@enduml
+
+
+
+
+
+

@@ -1,0 +1,103 @@
+@startuml
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class DisplayEmployeesUI {}
+
+class DisplayEmployeesController {
+    +getAgencyRepository()
+    +getEmployeeRepository()
+    +getAgenciesList()
+    +getEmployeesList()
+    +getEmployeesListDto(agency)
+    +addToNewAgenciesListDto(agencyDto)
+}
+
+class EmployeeRepository {
+    -employeesList
+}
+
+class AgencyRepository {
+    - agenciesList
+}
+
+class AgencyNetworkRepository {}
+
+class Employee {
+   	- int passport
+   	- int vat
+   	- String address
+   	- long phoneNumber
+   	- Agency agency
+
+}
+
+class Agency {
+    - String name
+	- int vat
+	- String location
+	- String email
+	- long phoneNumber
+	- ArrayList<Employee> employees
+	- Employee manager
+}
+
+class "Network Manager" {
+    - long phoneNumber
+    - String email
+    - String password
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getAgencyRepository()
+    + getEmployeeRepository()
+}
+
+class AgenciesMapper {
+    +toAgenciesListDto(agenciesList)
+}
+
+class EmployeesMapper {
+    +toEmployeesListDto(employeesList)
+}
+
+class ApplicationSession {
+    -currentUser
+    +getCurrentUser()
+}
+
+Repositories -> Repositories : instance
+
+DisplayEmployeesUI .> DisplayEmployeesController
+
+DisplayEmployeesController .> Repositories : repositories
+
+DisplayEmployeesController ..> EmployeesMapper : employeesMapper
+
+DisplayEmployeesController ..> AgenciesMapper : agenciesMapper
+
+DisplayEmployeesController ..> ApplicationSession : applicationSession
+
+AgenciesMapper ..> Agency
+
+EmployeesMapper ..> Employee
+
+Repositories --> "1" EmployeeRepository
+
+Repositories --> "1" AgencyRepository
+
+Repositories --> "1" AgencyNetworkRepository
+
+Agency "1" -> "*" Employee : has
+
+Employee --> "Network Manager" : seenBy
+
+ApplicationSession --> "Network Manager" : has
+
+@enduml

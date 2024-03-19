@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="663px" preserveAspectRatio="none" style="width:195px;height:663px;background:#FFFFFF;" version="1.1" viewBox="0 0 195 663" width="195px" zoomAndPan="magnify"><defs/><g><!--MD5=[09ce52be0ee7de43c61b6e2d59bf108b]
+class Person--><g id="elem_Person"><rect codeLine="12" fill="#F1F1F1" height="100.4414" id="Person" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="78" x="7" y="273"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="47" x="22.5" y="291.5352">Person</text><line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="84" y1="299.4883" y2="299.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="38" x="13" y="317.0234">name</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="37" x="13" y="333.5117">email</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="66" x="13" y="350">password</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="27" x="13" y="366.4883">role</text></g><!--MD5=[6b626634f3bb0842bebd5e499c80b711]
+class Property--><g id="elem_Property"><rect codeLine="19" fill="#F1F1F1" height="166.3945" id="Property" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="151" x="37.5" y="490"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="58" x="84" y="508.5352">Property</text><line style="stroke:#181818;stroke-width:0.5;" x1="38.5" x2="187.5" y1="516.4883" y2="516.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="38" x="43.5" y="534.0234">name</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="54" x="43.5" y="550.5117">address</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="30" x="43.5" y="567">area</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="139" x="43.5" y="583.4883">distanceFromCenter</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="34" x="43.5" y="599.9766">price</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="23" x="43.5" y="616.4648">city</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="47" x="43.5" y="632.9531">district</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="33" x="43.5" y="649.4414">state</text></g><!--MD5=[8779c9acfbd3b4b841a4b1ff0d39589b]
+class TransactionRequest--><g id="elem_TransactionRequest"><rect codeLine="30" fill="#F1F1F1" height="149.9063" id="TransactionRequest" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="142" x="42" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="136" x="45" y="25.5352">TransactionRequest</text><line style="stroke:#181818;stroke-width:0.5;" x1="43" x2="183" y1="33.4883" y2="33.4883"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="43" x="48" y="51.0234">owner</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="48" y="67.5117">buyer</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="48" y="84">agent</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="34" x="48" y="100.4883">price</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="82" x="48" y="116.9766">commission</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61" x="48" y="133.4648">accepted</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="110" x="48" y="149.9531">transactionType</text></g><!--MD5=[f0f51c1e58928148ba22af696951b623]
+link Person to Property--><g id="link_Person_Property"><path codeLine="40" d="M59.24,373 C68.28,406.45 80.47,451.58 90.95,490.4 " fill="none" id="Person-Property" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#000000" points="81.3038,436.4823,81.7825,426.9838,76.108,428.5165,81.3038,436.4823" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="22" x="89" y="436.5684">has</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="56.4375" y="394.4378">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="22" x="65.7999" y="479.3767">0..*</text></g><!--MD5=[e9ca657662337bf9bbba2a9bf9147ae6]
+link TransactionRequest to Property--><g id="link_TransactionRequest_Property"><path codeLine="41" d="M120.35,155.85 C123.01,185.92 125.69,221.1 127,253 C129.55,315.17 129.43,330.83 127,393 C125.76,424.77 123.28,459.64 120.76,490.1 " fill="none" id="TransactionRequest-Property" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#000000" points="133.0061,328.1553,135.934,319.1066,130.0561,319.1138,133.0061,328.1553" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="22" x="142" y="328.0684">has</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="113.5434" y="177.1276">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="113.1066" y="479.3307">1</text></g><!--MD5=[1b0df45ac219eba76165352181f32d73]
+link TransactionRequest to Person--><g id="link_TransactionRequest_Person"><path codeLine="42" d="M92.44,155.99 C81.79,194.07 69.07,239.54 59.64,273.26 " fill="none" id="TransactionRequest-Person" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#000000" points="80.6532,219.4705,85.9199,211.5513,80.2593,209.9681,80.6532,219.4705" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="22" x="91" y="219.5684">has</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="75.6905" y="177.3174">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="8" x="53.0559" y="262.4116">1</text></g><!--MD5=[74bbd620d6924928a394723fbba3f538]
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Person {
+	name
+	email
+	password
+	role
+}
+
+class Property {
+	name
+	address
+	area
+	distanceFromCenter
+	price
+	city
+	district
+	state
+}
+
+class TransactionRequest {
+	owner
+	buyer
+	agent
+	price
+	commission
+	accepted
+	transactionType
+}
+
+Person "1" - - "0..*" Property : has >
+TransactionRequest "1" - - "1" Property : has >
+TransactionRequest "1" - - "1" Person : has >
+@end
+
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Person {
+	name
+	email
+	password
+	role
+}
+
+class Property {
+	name
+	address
+	area
+	distanceFromCenter
+	price
+	city
+	district
+	state
+}
+
+class TransactionRequest {
+	owner
+	buyer
+	agent
+	price
+	commission
+	accepted
+	transactionType
+}
+
+Person "1" - - "0..*" Property : has >
+TransactionRequest "1" - - "1" Property : has >
+TransactionRequest "1" - - "1" Person : has >
+@end
+
+PlantUML version 1.2022.7(Mon Aug 22 18:01:30 WEST 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: GB
+--></g></svg>

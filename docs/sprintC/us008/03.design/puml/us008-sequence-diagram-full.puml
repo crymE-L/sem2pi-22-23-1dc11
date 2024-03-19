@@ -1,0 +1,92 @@
+@startuml
+title Transaction Request List Display
+
+actor Agent
+participant displayListUI as UI_CRTL
+participant displayListController as DISP_CTRL
+participant ":Repositories" as REPO
+participant "repositories\n :Repositories" as REP
+participant "requestListRepository\n :RequestListRepository" as LIST_REP
+participant "propertyRepository\n :PropertyRepository" as PROP_REP
+activate Agent
+Agent->UI_CRTL: Requests personal transaction request list
+activate UI_CRTL
+
+UI_CRTL-> DISP_CTRL: getRequestList()
+
+activate DISP_CTRL
+    DISP_CTRL-> REPO: getInstances()
+
+    activate REPO
+        REPO --> DISP_CTRL: repositories
+        deactivate REPO
+
+        DISP_CTRL-> REP: getRequestListRepository
+
+        activate REP
+        REP--> DISP_CTRL: requestListReporitory
+        deactivate REP
+
+        DISP_CTRL->LIST_REP: getRequestList()
+
+        activate LIST_REP
+        LIST_REP --> DISP_CTRL : requestList
+        deactivate LIST_REP
+
+        DISP_CTRL-->UI_CRTL: requestList
+        deactivate DISP_CTRL
+
+UI_CRTL--> Agent: Display request list sorted by date
+deactivate UI_CRTL
+Agent -> Agent: Select Request
+Agent-> UI_CRTL: Accepts request
+activate UI_CRTL
+UI_CRTL-> DISP_CTRL: removeFromList()
+activate DISP_CTRL
+
+    DISP_CTRL-> REPO: getInstances()
+
+    activate REPO
+        REPO --> DISP_CTRL: repositories
+        deactivate REPO
+
+        DISP_CTRL-> REP: getRequestListRepository
+
+        activate REP
+        REP--> DISP_CTRL: requestListReporitory
+
+        deactivate REP
+
+        DISP_CTRL-> LIST_REP: removeFromList()
+
+
+
+        activate LIST_REP
+        LIST_REP->LIST_REP: removeFromList()
+        activate LIST_REP
+        LIST_REP-->LIST_REP
+        deactivate LIST_REP
+        LIST_REP--> DISP_CTRL
+        deactivate LIST_REP
+
+        DISP_CTRL-> REPO: getInstances()
+
+            activate REPO
+                REPO --> DISP_CTRL: repositories
+                deactivate REPO
+                DISP_CTRL-> REP: getPropertyRepository
+                activate REP
+                REP--> DISP_CTRL: propertyRepository
+                deactivate REP
+                DISP_CTRL-> PROP_REP: addProperty()
+                activate PROP_REP
+                PROP_REP->PROP_REP: addProperty()
+                PROP_REP-->PROP_REP
+                PROP_REP--> DISP_CTRL: task successful
+                deactivate PROP_REP
+                DISP_CTRL-->UI_CRTL: task successful
+                deactivate DISP_CTRL
+                UI_CRTL--> Agent: Display success message
+                deactivate UI_CRTL
+
+@enduml

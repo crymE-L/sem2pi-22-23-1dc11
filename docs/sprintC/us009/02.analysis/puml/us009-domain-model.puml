@@ -1,0 +1,94 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class User {
+    - name
+    - email
+ 	- password
+ 	- role
+}
+
+' willBuy is a boolean that will be filled
+' out later (false by default) to indicate
+' if the visitor actually wants the property
+class VisitRequest {
+	- user
+	- property
+	- date
+	- time
+	- willBuy
+}
+
+class Property {
+	- photos
+	- area
+	- distanceFromCenter
+	- price
+	- owner
+	- employee
+	- visitRequests
+	- address
+}
+
+class Habitation {
+    - bedrooms
+    - bathrooms
+    - parkingSpaces
+    - hasCentralHeating
+    - hasAirConditioning
+}
+
+class House {
+    - hasBasement
+    - hasInhabitableLoft
+    - sunExposure
+}
+
+class Date {
+    - day
+    - month
+    - year
+}
+
+class Time {
+    - hours
+    - minutes
+    - seconds
+}
+
+class Employee {
+	- passport
+	- vat
+	- address
+	- phone
+	- agency
+}
+
+class Role {
+    - name
+    - permissionLevel
+}
+
+Employee "*" -- "1" Role: Has >
+
+User "1" -- "*" Property: Sees >
+
+Property "*" -- "1" Employee
+Property "1" -- "1" Habitation
+Habitation "1" -- "1" House
+
+VisitRequest "1" -- "1" Date : Has >
+VisitRequest "1" -- "1" Time : Has >
+
+VisitRequest "1" -- "1" Employee
+VisitRequest "*" -- "1" User : Submits <
+VisitRequest "*" -- "1" Property
+
+@enduml

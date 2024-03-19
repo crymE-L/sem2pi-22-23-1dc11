@@ -1,0 +1,177 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "User" as CLIENT
+participant ":VisitRequestUI" as UI
+participant ":VisitRequestController" as CTRL
+participant ":Repositories" as REP
+participant ":Repositories\n:Repositories" as rep
+participant "personRepository\n:PersonRepository" as PersonRepository
+participant "propertyRepository\n:PropertyRepository" as PropertyRepository
+participant "messageRepository\n:MessageRepository" as MessageRepository
+participant "employeeRepository\n:EmployeeRepository" as EmployeeRepository
+participant ":PersonMapper" as PersonMapper
+participant ":PropertyMapper" as PropertyMapper
+participant ":MessageMapper" as MessageMapper
+participant ":EmployeeMapper" as EmployeeMapper
+participant "personListDto\n:List<Person>" as personListDto
+participant "propertyListDto\n:List<Property>" as propertyListDto
+participant "messageListDto\n:List<Message>" as messageListDto
+participant "employeeListDto\n:List<Employee>" as employeeListDto
+
+actor "Employee" as Agent
+
+activate CLIENT
+
+        CLIENT -> UI : asks to make a visit request to a property
+
+        activate UI
+
+            UI -> CTRL** : create
+
+            activate CTRL
+
+                CTRL -> REP : getInstance()
+
+                activate REP
+
+                REP --> CTRL : repositories
+
+                deactivate REP
+
+                CTRL -> rep : getPersonRepository()
+
+                activate rep
+
+                rep --> CTRL : personRepository
+
+                CTRL -> rep : getPropertyRepository()
+
+                rep --> CTRL : propertyRepository
+
+                CTRL -> rep : getMessageRepository()
+
+                rep --> CTRL : messageRepository
+
+                CTRL -> rep : getEmployeeRepository()
+
+                rep --> CTRL : employeeRepository
+
+                deactivate rep
+
+            CTRL -> PersonRepository : getPersonList()
+
+            activate PersonRepository
+
+            PersonRepository --> CTRL : personList
+
+            deactivate PersonRepository
+
+            CTRL -> PropertyRepository : getPropertyList()
+
+            activate PropertyRepository
+
+            PropertyRepository --> CTRL : propertyList
+
+            deactivate PropertyRepository
+
+            CTRL -> MessageRepository : getMessageList()
+
+            activate MessageRepository
+
+            MessageRepository --> CTRL : messageList
+
+            deactivate MessageRepository
+
+            CTRL -> EmployeeRepository : getEmployeeList()
+
+            activate EmployeeRepository
+
+            EmployeeRepository --> CTRL : employeeList
+
+            deactivate EmployeeRepository
+
+            CTRL -> PersonMapper : personList = toPersonListDto(personList)
+
+            activate PersonMapper
+
+            PersonMapper -> CTRL : personListDto
+
+            deactivate PersonMapper
+
+            CTRL -> PropertyMapper : propertyList = toPropertyListDto(propertyList)
+
+            activate PropertyMapper
+
+            PropertyMapper -> CTRL : propertyListDto
+
+            deactivate PropertyMapper
+
+            CTRL -> MessageMapper : messageList = toMessageListDto(messageList)
+
+            activate MessageMapper
+
+            MessageMapper -> CTRL : messageListDto
+
+            deactivate MessageMapper
+
+            CTRL -> EmployeeMapper : employeeList = toEmployeeListDto(employeeList)
+
+            activate EmployeeMapper
+
+            EmployeeMapper -> CTRL : employeeListDto
+
+            deactivate EmployeeMapper
+
+            loop for each visit request
+
+            CTRL -> personListDto : getPersonListDto()
+
+            activate personListDto
+
+            personListDto -> CTRL : personListDto
+
+            deactivate personListDto
+
+            CTRL -> propertyListDto : getPropertyListDto()
+
+            activate propertyListDto
+
+            propertyListDto -> employeeListDto : getEmployeeListDto
+
+            activate employeeListDto
+
+                employeeListDto -> propertyListDto : employeeListDto
+
+            deactivate employeeListDto
+
+                propertyListDto -> CTRL : employeeListDto
+
+            deactivate propertyListDto
+
+        CTRL -> messageListDto : getMessageListDto()
+
+        activate messageListDto
+
+        messageListDto -> CTRL : messageListDto
+
+        deactivate messageListDto
+
+        end
+
+        CTRL -> UI : checks if request is valid
+
+        deactivate CTRL
+
+        UI -> CLIENT : shows status message, depending on the request outcome
+
+        deactivate UI
+
+deactivate CLIENT
+
+@enduml

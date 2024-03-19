@@ -1,0 +1,43 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Person {
+	name
+	email
+	password
+	role
+}
+
+class Property {
+	name
+	address
+	area
+	distanceFromCenter
+	price
+	city
+	district
+	state
+}
+
+class TransactionRequest {
+	owner
+	buyer
+	agent
+	price
+	commission
+	accepted
+	transactionType
+}
+
+Person "1" -- "0..*" Property : has >
+TransactionRequest "1" -- "1" Property : has >
+TransactionRequest "1" -- "1" Person : has >

@@ -1,0 +1,40 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Owner" as Employee
+actor "Agent" as Agent
+participant "System" as System
+
+    Employee -> Agent : Contacts agent
+
+    activate Agent
+
+    Agent -> System : Sends data to create the property
+
+    deactivate Agent
+
+    activate System
+
+    System --> Agent : Show success message
+
+    deactivate System
+
+    Agent -> System : Makes sale announcement
+
+    activate System
+
+    System --> Agent : Show success message
+
+    deactivate System
+
+    activate Agent
+
+    Agent --> Employee : Communicates sucess
+
+    deactivate Agent
+
+@enduml

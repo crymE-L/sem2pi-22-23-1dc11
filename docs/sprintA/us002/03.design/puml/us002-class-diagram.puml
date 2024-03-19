@@ -1,0 +1,58 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+class CreateTransactionRequestUI {}
+
+class CreateTransactionRequestController {
+	+ CreateTransactionRequestController(transactionRequestsRepository)
+	+ getTransactionRequestRepository()
+	+ createTransactionRequest(owner, buyer, agent, price, commission, accepted)
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getTransactionRequestRepository()
+}
+
+class TransactionRequest {
+	- Person owner
+	- Person buyer
+	- Employee agent
+	- int price
+	- float commission
+	- boolean accepted
+}
+
+class Employee {
+    - name
+    - email
+    - password
+    - role
+	- passport
+	- vat
+	- address
+	- phone
+	- agency
+}
+
+Repositories -> Repositories : instance
+
+CreateTransactionRequestUI .> CreateTransactionRequestController
+
+CreateTransactionRequestController .> Repositories : repositories
+
+Repositories --> "1" TransactionRequestRepository
+
+CreateTransactionRequestController ..> TransactionRequest : TransactionRequestRepository
+
+CreateTransactionRequestUI --> Employee : acessedBy
+@enduml

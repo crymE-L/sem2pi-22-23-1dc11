@@ -1,0 +1,117 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Client" as Person
+participant ":System" as System
+
+activate Person
+
+	Person -> System : Enters the application
+
+	activate System
+
+		System --> Person : Shows a complete list of the available properties, sorted from the most recent to the oldest
+
+		opt Selects the type of business, property, number of rooms, price, city and/or state
+
+            Person -> System : Selects the filter(s)
+
+             opt Filters by price (or more) and sorts by ascending or descending
+             Person -> System : Selects the filter(s)
+
+             end
+
+            System --> Person : Shows a complete list of the available properties, sorted from the most recent to the oldest
+
+        end
+
+	deactivate System
+
+	Person -> System : Clicks on the property of his interest
+
+	activate System
+
+		System --> Person : Renders the page of the chosen property
+
+	deactivate System
+
+	Person -> System : Clicks on the "Schedule a visit" button
+
+	activate System
+
+		System --> Person : Renders the chat with the respective agent, which has some required fields such as client's name, phone number, preferred date and time slot
+
+	deactivate System
+
+    Person -> System : Fills in the fields and sends the visit request
+
+	activate System
+
+    alt Checks if the visit request is valid
+
+	System --> Person : If the request is valid, registers it in the system and shows success message
+	System --> Person : If the request is not valid, shows error message
+
+    end
+
+    opt  Submits multiple visit requests to other properties
+
+    activate System
+
+    		System --> Person : Shows a complete list of the available properties, sorted from the most recent to the oldest
+
+    	deactivate System
+
+    	Person -> System : Clicks on the property of his interest
+
+    	activate System
+
+    		System --> Person : Renders the page of the chosen property
+
+    	deactivate System
+
+    	Person -> System : Clicks on the "Schedule a visit" button
+
+    	activate System
+
+    		System --> Person : Renders the chat with the respective agent, which has some required fields such as client's name, phone number, preferred date and time slot
+
+    	deactivate System
+
+        Person -> System : Fills in the fields and sends the visit request
+
+    	activate System
+
+        System -> Person : Checks the visit request's validation
+
+        alt If the request is valid
+
+        System --> Person : Registers the visit request in the system and shows success message
+
+        end
+
+        alt If the request is not valid due to overlap
+
+        System --> Person : If the request is not valid, shows overlap error message
+
+        end
+
+        alt If the request is not valid due to another error
+
+    	System --> Person : If the request is not valid, shows error message
+
+    	end
+
+    	deactivate System
+
+    end
+
+	deactivate System
+
+deactivate Person
+
+@enduml

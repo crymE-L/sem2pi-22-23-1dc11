@@ -1,0 +1,123 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Unregisted User" as ADM
+participant ":CreateAccountUI" as UI
+participant ":CreateAccountController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "AccountRepository:\nAccountRepository" as AccountRepository
+participant "account\n:Account" as TAREFA
+
+activate ADM
+
+        ADM -> UI : asks to create a user account
+
+        activate UI
+
+            UI -> CTRL** : create
+
+            UI --> ADM : requests data
+
+        deactivate UI
+
+
+    ADM -> UI : types requested data(name, passport card number, tax number,\naddress, email, telephone number)
+
+    activate UI
+
+
+    alt Optional
+
+    ADM -> UI : types optional data(state, district, city)
+
+    end
+
+    activate UI
+
+        UI -> CTRL : createAccount(name, passport card number, tax number,\naddress, email, telephone number)
+
+        activate CTRL
+
+            activate CTRL
+
+                CTRL -> RepositorySingleton : getInstance()
+
+                activate RepositorySingleton
+
+                    RepositorySingleton --> CTRL: repositories
+
+                deactivate RepositorySingleton
+
+                CTRL -> PLAT : getAccountRepository()
+
+                activate PLAT
+
+                PLAT -> CTRL : AccountRepository
+
+                deactivate PLAT
+
+                CTRL -> AccountRepository : getUserAccounts()
+
+                activate AccountRepository
+
+                AccountRepository --> AccountRepository : existsUser(email)
+
+                alt The user exist
+
+                AccountRepository --> CTRL : failure
+
+                CTRL --> UI : failure
+
+                    UI --> ADM : displays operation failure
+
+                    else The user does not exist
+
+                AccountRepository --> CTRL : success
+
+                deactivate AccountRepository
+
+                    CTRL -> AccountRepository: createAccount(name, passport card number, tax number,\naddress, email, telephone number)
+
+                    activate AccountRepository
+
+                    AccountRepository -> TAREFA**: create(name, passport card number, tax number,\naddress, email, telephone number)
+
+                    AccountRepository -> AccountRepository: addAccount(account)
+
+                        activate AccountRepository
+
+                        AccountRepository -> AccountRepository: validateAccount(account)
+
+                            activate AccountRepository
+
+                            AccountRepository --> AccountRepository
+
+                            deactivate AccountRepository
+
+                        AccountRepository --> AccountRepository
+
+                    deactivate AccountRepository
+
+                    AccountRepository --> CTRL : account
+
+                deactivate AccountRepository
+
+
+                CTRL --> UI: account
+
+                deactivate CTRL
+
+            UI --> ADM: displays operation success
+
+            deactivate UI
+
+    deactivate ADM
+
+end
+
+@enduml

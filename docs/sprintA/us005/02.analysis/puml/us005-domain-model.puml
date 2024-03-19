@@ -1,0 +1,45 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class "System Administrator" {
+    phoneNumber
+    email
+    password
+}
+
+class "Store Network" {
+    designation
+    email
+    address
+    telephoneNumber
+}
+
+class Store {
+    designation
+    address
+    storeManager
+}
+
+class State {}
+
+class District {}
+
+class City {}
+
+"System Administrator" "1" -- "*" "Store Network" : has >
+"Store Network" "1" -- "*" Store : has >
+"Store Network" "1" -- "*" State : Selects >
+"Store Network" "1" -- "*" District : Selects >
+"Store Network" "1" -- "*" City : Selects >
+Store "1" -- "*" State : Selects >
+Store "1" -- "*" District : Selects >
+Store "1" -- "*" City : Selects >
+
+@enduml

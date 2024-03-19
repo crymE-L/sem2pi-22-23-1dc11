@@ -1,0 +1,40 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+'skinparam shadowing false
+
+skinparam rectangle{
+    BorderColor white
+}
+
+'title Use Case Diagram Example
+
+left to right direction
+
+    actor "System\nAdministrator" as System_Administrator
+    actor "User" as User
+    actor "Unregistered\nUser" as Unregistered_User
+    actor "Owner" as Owner
+    actor "Agent" as Agent
+    actor "New Employee" as New_Employee
+
+
+    usecase "Store" as UC5
+    usecase "see listed properties" as UC1
+    usecase "launches a sale\nannouncement" as UC21
+    usecase "is contacted by a client" as UC22
+    usecase "registers a new employee" as UC3
+    usecase "chooses the agent" as UC41
+    usecase "submits a request for listing a property" as UC42
+    usecase "registers a store" as UC5
+    usecase "creates an account" as UC7
+
+    Unregistered_User --> UC1
+    Agent --> UC22
+    UC22 --> UC21
+    System_Administrator --> UC3
+    Owner --> UC41
+    UC41 --> UC42
+    System_Administrator --> UC5
+    Unregistered_User --> UC7
+@enduml

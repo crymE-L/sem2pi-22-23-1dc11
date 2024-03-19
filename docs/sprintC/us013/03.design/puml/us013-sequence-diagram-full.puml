@@ -1,0 +1,208 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Network Manager" as networkManager
+
+participant ":DisplayEmployeesUI" as UI
+participant ":DisplayEmployeesController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "agencyRepository\n:AgencyRepository" as AgencyRepository
+participant "employeeRepository\n:EmployeeRepository" as EmployeesRepository
+participant "agencyNetworkRepository\n:AgencyNetworkRepository" as AgencyNetworkRepository
+participant ":AgenciesMapper" as AgenciesMapper
+participant ":EmployeesMapper" as EmployeesMapper
+participant "applicationSession\n:AplicationSession" as AppSession
+participant "agenciesListDto\n:List<Agency>" as agencyListDto
+participant "newAgenciesListDto\n:List<Agency>" as newAgencyListDto
+participant "employeesListDto\n:List<Employee>" as employeesListDto
+participant "newEmployeesListDto\n:List<Employee>" as newEmployeeListDto
+
+
+activate networkManager
+
+        networkManager -> UI : asks to list all the network employees
+
+        activate UI
+
+            UI -> CTRL** : create
+
+            activate CTRL
+
+                CTRL -> RepositorySingleton : getInstance()
+
+                activate RepositorySingleton
+
+                    RepositorySingleton --> CTRL: repositories
+
+                deactivate RepositorySingleton
+
+                CTRL -> PLAT : getAgencyRepository()
+
+                activate PLAT
+
+                PLAT --> CTRL : agencyRepository
+
+                CTRL -> PLAT : getEmployeeRepository()
+
+                PLAT --> CTRL : employeesRepository
+
+                CTRL -> PLAT : getAgencyNetworkRepository
+
+                PLAT --> CTRL : agencyNetworkRepository
+
+                deactivate PLAT
+
+            CTRL -> AgencyRepository : getAgenciesList()
+
+            activate AgencyRepository
+
+            AgencyRepository --> CTRL : AgenciesList
+
+            deactivate AgencyRepository
+
+            CTRL -> EmployeesRepository : getEmployeesList()
+
+            activate EmployeesRepository
+
+            EmployeesRepository --> CTRL : employeesList
+
+            deactivate EmployeesRepository
+
+            CTRL -> AgenciesMapper : agenciesList = toAgenciesListDto(agenciesList)
+
+            activate AgenciesMapper
+
+            Loop for each agency
+
+                AgenciesMapper -> AgenciesMapper : agency = toAgencyDto(agency)
+
+                activate AgenciesMapper
+
+                    AgenciesMapper --> AgenciesMapper : addAgencyToAgenciesListDto
+
+                deactivate AgenciesMapper
+
+            end
+
+            AgenciesMapper -> CTRL : agenciesListDto
+
+            deactivate AgenciesMapper
+
+            CTRL -> EmployeesMapper : employeesList = toEmployeesListDTO(employeesList)
+
+            activate EmployeesMapper
+
+            Loop for each employee
+
+                EmployeesMapper -> EmployeesMapper : employee = toEmployeeDto(employee)
+
+                    activate EmployeesMapper
+
+                        EmployeesMapper --> EmployeesMapper : addEmployeeToEmployeesListDto
+
+                    deactivate EmployeesMapper
+
+            end
+
+            EmployeesMapper -> CTRL : employeesListDto
+
+            deactivate EmployeesMapper
+
+            CTRL -> AppSession : getCurrentUser()
+
+            activate AppSession
+
+            AppSession --> CTRL : currentUser
+
+            deactivate AppSession
+
+            CTRL -> AgencyNetworkRepository : getCurrentUserAgencyNetwork
+
+            activate AgencyNetworkRepository
+
+            Loop for each agency network
+
+                        alt agencyNetwork.equals(userAgencyNetwork)
+
+                        AgencyNetworkRepository -> AgencyNetworkRepository : getUserAgencyNetwork(agencyNetwork)
+
+                        end
+
+            end
+
+            AgencyNetworkRepository --> CTRL : currentUserAgencyNetwork
+
+            deactivate AgencyNetworkRepository
+
+            CTRL -> agencyListDto : getAgenciesFromAgencyNetwork(userAgencyNetwork)
+
+            activate agencyListDto
+
+            Loop for each agencyDto
+
+            agencyListDto -> agencyListDto : getAgencyDto(agencyNetwork)
+
+                activate agencyListDto
+
+                agencyListDto --> agencyListDto : addAgencyDtoToNewAgenciesListDto(agencyDto)
+
+                deactivate agencyListDto
+
+            end
+
+            agencyListDto --> CTRL : newAgencieListDto
+
+            deactivate agencyListDto
+
+            deactivate EmployeesMapper
+
+            loop for each agencyDto
+
+            CTRL -> newAgencyListDto : getEmployeesListDto(agencyDto)
+
+                activate newAgencyListDto
+
+                    newAgencyListDto -> employeesListDto : getEmployeesListDto(agecyDto)
+
+                activate employeesListDto
+
+                    Loop for each employeeDto
+
+                    employeesListDto -> employeesListDto : getEmployeeDto(agency)
+
+                    employeesListDto -> newEmployeeListDto : addEmployee
+
+                        activate newEmployeeListDto
+
+                    end
+                        newEmployeeListDto --> employeesListDto : newEmployeeListDto
+
+                        deactivate newEmployeeListDto
+
+                    employeesListDto -> newAgencyListDto : newEmployeesListDto
+
+                deactivate employeesListDto
+
+                        newAgencyListDto -> CTRL : newEmployeesListDto
+
+                    deactivate newAgencyListDto
+
+            end
+
+                CTRL --> UI: newEmployeesListDto
+
+            deactivate CTRL
+
+            UI --> networkManager: displays all the network employees
+
+        deactivate UI
+
+
+deactivate networkManager
+
+@enduml

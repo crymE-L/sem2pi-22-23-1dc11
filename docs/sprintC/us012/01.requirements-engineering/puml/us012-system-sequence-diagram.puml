@@ -1,0 +1,42 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "System Administrator" as systemAdmin
+participant ":System" as System
+
+activate systemAdmin
+
+    systemAdmin -> System : Asks to import a file from a legacy system
+    activate System
+
+    System --> systemAdmin : Request data
+    deactivate System
+
+    systemAdmin -> System : Types requested data (filePath)
+    activate System
+
+    System --> systemAdmin : Shows requested data and asks submits
+    deactivate System
+
+    systemAdmin -> System : Submits requested data (filePath)
+    activate System
+
+    alt The file is empty or its content is not in the requested format.
+
+    System --> systemAdmin : Show the insuccess message
+
+    else else
+
+    System --> systemAdmin : Show the success message
+
+    deactivate System
+
+    end
+
+deactivate systemAdmin
+
+@enduml

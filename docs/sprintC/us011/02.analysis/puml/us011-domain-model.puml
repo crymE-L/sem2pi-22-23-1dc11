@@ -1,0 +1,66 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class Employee {
+    name
+    passports's card number
+    tax number
+    address
+    email address
+    contact telephone number
+
+}
+
+class TransactionRequest {
+    address
+    area
+    price
+    type
+    commission
+}
+
+class Role {
+    role
+    permission level
+}
+
+class Agency {
+    name
+    email
+    telephone
+    vat
+    location
+}
+
+class State {
+}
+
+class District {
+}
+
+class City {
+}
+
+
+
+Employee "1" -- "*" TransactionRequest: Accepts/Declines >
+Employee "1" - "*" Role: has >
+Employee "1" - "1" Agency: works at >
+"Employee" "1" -- "1" State : has >
+"Employee" "1" -- "1" City : has >
+"Employee" "1" -- "1" District : has >
+"Agency" "1" -- "1" State : has >
+"Agency" "1" -- "1" City : has >
+"Agency" "1" -- "1" District : has >
+TransactionRequest "1" -- State : has >
+TransactionRequest "1" -- City : has >
+TransactionRequest "1" -- District : has >
+
+@enduml

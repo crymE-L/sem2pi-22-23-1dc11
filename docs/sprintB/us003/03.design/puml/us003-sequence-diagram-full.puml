@@ -1,0 +1,182 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "System Administrator" as ADM
+participant ":RegisterEmployeeUI" as UI
+participant ":RegisterEmployeeController" as CTRL
+participant ":Repository" as REP
+participant ":Repository\n:Repository" as rep
+participant "AgencyRepository:\nAgencyRepository" as AR
+participant "RoleRepository:\nRoleRepository" as RR
+participant "EmployeeRepository\n:EmployeeRepository" as EREP
+participant "PassewordGenerator\n:PasswordGenerator" as PASS
+participant "AuthenticationRepository\n:AuthenticationRepository" as AUREP
+participant "Employee\n:Employee" as EMP
+
+activate ADM
+
+        ADM -> UI : asks to register an employee
+
+        activate UI
+
+            UI -> CTRL** : create
+            UI -> CTRL: getInstance()
+
+            activate CTRL
+
+                CTRL -> REP: getInstance()
+
+                activate REP
+
+                    REP -->  CTRL : repositories
+                deactivate REP
+
+                    CTRL -> rep : getAgencyRepository()
+
+                    activate rep
+
+                        rep --> CTRL : agencyRepository
+
+                    deactivate rep
+
+                    CTRL -> AR : getAgencyList()
+                activate AR
+
+                    AR -> CTRL:  agencyList
+
+                deactivate AR
+
+                CTRL-> UI: agencyList
+
+            deactivate CTRL
+
+            UI --> ADM : shows agencies list and asks to select one
+
+        deactivate UI
+
+    ADM -> UI : selects an agency
+    activate UI
+
+        UI --> UI : keepAgency()
+UI -> CTRL: getInstance()
+
+            activate CTRL
+
+                CTRL -> REP: getInstance()
+
+                activate REP
+
+                    REP -->  CTRL : repositories
+                deactivate REP
+
+                    CTRL -> rep : getRoleRepository()
+
+                    activate rep
+
+                        rep --> CTRL : roleRepository
+
+                    deactivate rep
+
+                    CTRL -> RR : getRoleList()
+                activate RR
+
+                    RR -> CTRL:  roleList
+
+                deactivate RR
+
+                CTRL-> UI: roleList
+
+            deactivate CTRL
+
+            UI --> ADM : shows role list and asks to select one
+
+        deactivate UI
+
+    deactivate UI
+
+    ADM -> UI : selects role
+    activate UI
+
+        UI --> UI : keepRole()
+        UI --> ADM : requests data
+
+    deactivate UI
+
+    ADM -> UI : types requested data (name, passport's card number, tax number,\naddress, email address, telephone number)
+
+    activate UI
+
+        UI --> ADM : shows the selected agency, role and the inserted data
+
+    deactivate UI
+
+    ADM -> UI : submits data
+
+    activate UI
+
+        UI -> CTRL : registerEmployee( name, passport's card number, tax number,\naddress, email address, telephone number, agency, role)
+
+        activate CTRL
+
+        CTRL -> EREP : registerEmployee( name, passport's card number, tax number,\naddress, email address, telephone number, agency, role)
+
+        activate EREP
+
+            EREP -> PASS : getPassword()
+
+            activate PASS
+
+                PASS --> EREP : password
+
+            deactivate PASS
+
+            EREP -> EMP** : registerEmployee( name, passport's card number, tax number,\naddress, email address, telephone number, agency, role)
+            EREP -> AUREP : addEmployee(email, password)
+
+            activate AUREP
+
+                AUREP --> AUREP : existsUser(email)
+                AUREP --> AUREP : addUser(email,password)
+                AUREP --> EREP : addEmployee(email,password)
+            deactivate AUREP
+
+            EREP -> EREP: addEmployee (employee)
+
+            activate EREP
+                EREP -> EREP : validateEmployee(employee)
+
+                activate EREP
+                    EREP --> EREP
+                deactivate EREP
+
+                EREP -->  EREP
+            deactivate EREP
+
+
+            EREP --> CTRL : employee
+            CTRL --> UI : employee
+
+        deactivate CTRL
+
+        UI --> ADM : shows operation success
+
+    deactivate UI
+
+
+
+
+
+
+
+
+
+    deactivate UI
+
+deactivate ADM
+
+@enduml

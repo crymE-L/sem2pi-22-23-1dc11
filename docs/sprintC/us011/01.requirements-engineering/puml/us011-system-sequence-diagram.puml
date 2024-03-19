@@ -1,0 +1,29 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Agent" as Agent
+participant ":System" as System
+
+activate Agent
+
+    Agent -> System : Asks to show real estate purchase orders for a property
+    activate System
+
+    loop till Agent is satisfied
+    System --> Agent : Display real estate properties orders list
+    deactivate System
+
+    Agent -> System: Accepts/declines the orders
+    activate System
+
+    System --> Agent: Sends success operation message
+    deactivate System
+    end
+
+
+@enduml
+

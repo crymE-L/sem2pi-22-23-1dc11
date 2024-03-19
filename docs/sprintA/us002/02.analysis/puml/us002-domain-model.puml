@@ -1,0 +1,62 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+'title Domain Model
+
+class Client {
+}
+
+class Agent {
+    name
+    email
+}
+
+class SaleRequest {
+}
+
+class System {
+
+}
+
+class Property {
+
+}
+
+class Land {
+    area
+    location
+    distanceFromCityCenter
+    price
+    photographs
+}
+
+class House {
+    area
+    location
+    distanceFromCityCenter
+    price
+    photographs
+    numberOfBedrooms
+    numberOfBathrooms
+    numberOfParkingSpaces
+    availableEquipment
+}
+
+Client "*" - "1*" Agent : contacts an >
+Client "1" -- "1*" Property : has a >
+Agent "1" - "1*" SaleRequest: to make a >
+SaleRequest "1" -- "1" System: to the >
+SaleRequest "*" -- "1*" Property: of a >
+Property "*" - "1" Land: can be >
+Property "*" - "1" House: can be >
+
+@enduml

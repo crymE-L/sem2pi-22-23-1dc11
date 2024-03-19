@@ -1,0 +1,137 @@
+@startuml
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+class LegacyFileUI {}
+
+class LegacyFileController {
+    - file
+    + LegacyFileController(agencyRepository)
+    + getFile(filePath)
+    + validateFile(file)
+    + readLineInformation()
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getPersonRepository()
+    + getPropertyRepository()
+    + getAgencyRepository()
+}
+
+class PersonRepository {
+    -personObject
+}
+
+class PropertyRepository {
+    -propertyObject
+}
+
+class AgencyRepository {
+    -agencyObject
+}
+
+class AnnouncementRepository {
+}
+
+class TransactionRepository {
+}
+
+class Person {
+    -String name
+    -int passport
+    -int vat
+    -String email
+    -String phoneNumber
+    +addPerson(name, passport, vat, \n email, phoneNumber)
+}
+
+class Property {
+    -String typeOfProperty
+    -float area
+    -String location
+    -float distanceFromCenter
+    -int numberOfBedrooms
+    -int numberOfBathrooms
+    -int parkingSpaces
+    -boolean hasCentralHeating
+    -boolean hasAirConditioning
+    -boolean basement
+    -boolean loft
+    -String sunExposure
+    -float price
+    -String businessType
+    +addProperty(typeOfProperty, area, location,\n distanceFromCenter, numberOfBedrooms,\n numberOfBathrooms, parkingSpaces, hasCentralHeating,\n hasAirConditioning, basement, loft, sunExposure,\n price, businessType)
+}
+
+class Agency {
+    -String name
+    -String location
+    -String phoneNumber
+    -String email
+    +addAgency(name, location, phoneNumber, email)
+}
+
+class Announcement {
+    -Person personObject
+    -Property propertyObject
+    -float price
+    -float commission
+    -int contractDuration
+    -Date date
+    +addAnnouncement(personObject, propertyObject,\n price, commission, contractDuration, date)
+}
+
+class Transaction {
+    -Person personObject
+    -Date dateOfSale
+    -Property propertyObject
+    -float price
+    +addTransaction(personObject, dateOfSale,\n propertyObject, price)
+}
+
+class SystemAdministrator {}
+
+LegacyFileUI .> LegacyFileController
+
+LegacyFileController .> Repositories : repositories
+
+Repositories -> Repositories : instance
+
+Repositories --> "1" PersonRepository
+
+Repositories --> "1" PropertyRepository
+
+Repositories --> "1" AgencyRepository
+
+Repositories --> "1" AnnouncementRepository
+
+Repositories --> "1" TransactionRepository
+
+LegacyFileController ..> Person : personRepository
+
+LegacyFileController ..> Property : propertyRepository
+
+LegacyFileController ..> Agency : agencyRepository
+
+LegacyFileController ..> Announcement : announcementRepository
+
+LegacyFileController ..> Transaction : transactionRepository
+
+Person --> SystemAdministrator : CreatedBy
+
+Property --> SystemAdministrator : CreatedBy
+
+Agency --> SystemAdministrator : CreatedBy
+
+Announcement --> SystemAdministrator : CreatedBy
+
+Transaction --> SystemAdministrator : CreatedBy
+
+
+@enduml

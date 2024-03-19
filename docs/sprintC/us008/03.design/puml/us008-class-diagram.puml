@@ -1,0 +1,42 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+class Agent{
+	-String passport
+	-String address
+	-String phone
+    -int vat
+
+}
+class DisplayListUI {
+  +getRequestList()
+  +removeFromList()
+}
+class DisplayListController {
+  -repositories: Repositories
+}
+
+class RequestListRepository {
+  +getRequestList()
+  +removeFromList()
+}
+class PropertyRepository {
+  +addProperty()
+}
+class Repositories {
+  +getInstances()
+}
+Agent -> DisplayListUI: Display
+DisplayListUI -down-> DisplayListController : DisplayListController
+DisplayListController -down-> Repositories: Repositories
+Repositories --> DisplayListController : DisplayListController
+DisplayListController -down-> RequestListRepository  : DisplayListController
+RequestListRepository --> DisplayListController : DisplayListController
+DisplayListController -> PropertyRepository : PropertyRepository
+PropertyRepository --> DisplayListController : DisplayListController
+Repositories-> Repositories: getInstances
+@enduml
+

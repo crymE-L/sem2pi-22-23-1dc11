@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant Agent
+participant System
+Agent-> System : Asks to see list of transactionRequests made for him
+System-> System: Sorts list by date
+System --> Agent: Lists Agent's transactionRequests
+
+Agent-> System: Posts announcement
+System-> System: Removes transactionRequest from repository
+System --> Agent: Show operation successful
+System -> Owner: Show accepted message
+
+@enduml

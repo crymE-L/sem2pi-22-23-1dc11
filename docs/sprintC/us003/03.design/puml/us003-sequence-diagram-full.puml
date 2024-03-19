@@ -1,0 +1,245 @@
+       @startuml
+   skinparam monochrome true
+   skinparam packageStyle rectangle
+   skinparam shadowing false
+
+   autonumber
+
+   'hide footbox
+   actor "System Administrator" as ADM
+   participant ":RegisterEmployeeUI" as UI
+   participant ":RegisterEmployeeController" as CTRL
+   participant ":Repository" as REP
+   participant ":Repository\n:Repository" as rep
+   participant "AgencyRepository:\nAgencyRepository" as AR
+   participant "RoleRepository:\nRoleRepository" as RR
+   participant "EmployeeRepository\n:EmployeeRepository" as EREP
+   participant "PassewordGenerator\n:PasswordGenerator" as PASS
+   participant "AuthenticationRepository\n:AuthenticationRepository" as AUREP
+   participant "Employee\n:Employee" as EMP
+
+   activate ADM
+
+           ADM -> UI : asks to register an employee
+
+           activate UI
+
+               UI -> CTRL** : create
+               UI -> CTRL: getRepositories()
+
+               activate CTRL
+
+                   CTRL -> REP: getRepositories()
+
+                   activate REP
+
+                       REP -->  CTRL : repositories
+                   deactivate REP
+
+                       CTRL -> rep : getAgencyRepository()
+
+                       activate rep
+
+                           rep --> CTRL : agencyRepository
+
+                       deactivate rep
+
+                       CTRL -> AR : getAgencyList()
+                   activate AR
+
+                       AR -> CTRL:  agencyList
+
+                   deactivate AR
+
+                   CTRL-> UI: agencyList
+
+               deactivate CTRL
+
+               UI --> ADM : shows agencies list and asks to select one
+
+           deactivate UI
+
+       ADM -> UI : selects an agency
+       activate UI
+
+           UI --> UI : keepAgency()
+
+   UI -> CTRL: getRepositories()
+
+               activate CTRL
+
+                   CTRL -> REP: getRepositories()
+
+                   activate REP
+
+                       REP -->  CTRL : repositories
+                   deactivate REP
+
+                       CTRL -> rep : getRoleRepository()
+
+                       activate rep
+
+                           rep --> CTRL : roleRepository
+
+                       deactivate rep
+
+                       CTRL -> RR : getRoleList()
+                   activate RR
+
+                       RR -> CTRL:  roleList
+
+                   deactivate RR
+
+                   CTRL-> UI: roleList
+
+               deactivate CTRL
+
+        loop till user is satisfied
+
+               UI --> ADM : shows role list and asks to select one
+
+           deactivate UI
+
+       deactivate UI
+
+       ADM -> UI : selects role
+       activate UI
+
+           UI --> UI : keepRole()
+
+           end
+           UI --> ADM : requests data
+
+       deactivate UI
+
+       ADM -> UI : types requested data (name, passport's card number, tax number,\naddress, state, city, districts, email , telephone number)
+
+       activate UI
+
+           UI --> ADM : shows the selected agency, role and the inserted data
+
+       deactivate UI
+
+       ADM -> UI : submits data
+
+           UI -> CTRL: registerEmployee()
+
+                       activate CTRL
+
+                           CTRL -> REP: getRepositories()
+
+                           activate REP
+
+                               REP -->  CTRL : repositories
+                           deactivate REP
+
+                               CTRL -> rep : getAgencyRepository()
+
+                               activate rep
+
+                                   rep --> CTRL : agencyRepository
+
+                               deactivate rep
+
+                               CTRL -> AR : getAgencyID()
+
+                           activate AR
+
+                               AR -> CTRL:  agencyID
+
+                           deactivate AR
+
+                               CTRL --> CTRL : keepAgencyID
+
+                               CTRL -> REP: getRepositories()
+
+                               activate REP
+
+                                   REP -->  CTRL : repositories
+
+                               deactivate REP
+
+                               CTRL -> rep : getRoleRepository()
+
+                               activate rep
+
+                                   rep --> CTRL : roleRepository
+
+                               deactivate rep
+
+                               CTRL -> RR : getRoleID()
+
+                                activate RR
+
+                                   RR -> CTRL:  roleID
+
+                                deactivate RR
+
+                                   CTRL --> CTRL : keeproleID
+
+
+                                CTRL -> EREP : registerEmployee( name, passport's card number, tax number,\naddress, email address, telephone number, agency, role)
+
+                                activate EREP
+
+                                    EREP -> PASS : getPassword()
+
+                                    activate PASS
+
+                                        PASS --> EREP : password
+
+                                    deactivate PASS
+
+                                    EREP -> EMP** : registerEmployee( name, passport's card number, tax number,\naddress, state, city, district, email address, telephone number, agencyId, roleId)
+                                    EREP -> AUREP : addUserWithRoles(name, email, password, roleId)
+
+                                    activate AUREP
+                                        alt exists
+                                        AUREP --> AUREP : existsUser(email)
+                                        AUREP --> EREP : abort operation
+                                        EREP --> CTRL : abort operation
+                                        CTRL --> UI : abort operation
+                                        UI --> ADM : sends error message and asks to submits data again
+
+                                        else doesn't exists
+                                        AUREP --> AUREP : addUserWithRoles(name, email, password, roleId)
+                                        AUREP --> EREP : addUserWithRoles(name, email, password, roleId)
+                                    deactivate AUREP
+
+                                    EREP -> EREP: addUserWithRoles(name, email, password, roleId)
+
+                                    activate EREP
+                                        EREP -> EREP : validateEmployee(employee)
+
+                                        activate EREP
+                                            EREP --> EREP
+                                        deactivate EREP
+
+                                        EREP -->  EREP
+                                    deactivate EREP
+
+
+
+
+                                    EREP --> CTRL : employee
+
+                                    deactivate EREP
+
+                                    CTRL --> UI : employee
+
+
+                       deactivate CTRL
+
+        deactivate CTRL
+
+        UI --> ADM : shows operation success
+        end
+
+       deactivate UI
+
+
+
+
+   deactivate ADM
+
+   @enduml

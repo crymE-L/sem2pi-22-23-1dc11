@@ -1,0 +1,45 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class "System Administrator" {
+    phone number
+    email
+    password
+}
+
+class "Store Network" {
+    designation
+    location
+    email adress
+    telephone number
+}
+
+class Agency {
+    designation
+    location
+    store manager
+}
+
+class Employee {
+    name
+    passports's card number
+    tax number
+    address
+    email address
+    contact telephone number
+    role
+    agency
+    password
+}
+
+"System Administrator" "1" -- "*" "Store Network" : has >
+"Store Network" "1" -- "*" Agency : has >
+"Agency" "1" -- "*" Employee : has >
+@enduml

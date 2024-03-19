@@ -1,0 +1,77 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+skinparam linetype ortho
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+class SystemAdministrator {}
+
+class Transaction {
+    - personObject
+    - dateOfSale
+    - propertyObject
+    - price
+}
+
+class Person {
+    - name
+    - passport
+    - vat
+    - email
+    - phoneNumber
+}
+
+class Agency {
+	- name
+    - location
+    - phoneNumber
+    - email
+}
+
+class Property {
+    - typeOfProperty
+    - area
+    - location
+    - distanceFromCenter
+    - numberOfBedrooms
+    - numberOfBathrooms
+    - parkingSpaces
+    - hasCentralHeating
+    - hasAirConditioning
+    - basement
+    - loft
+    - sunExposure
+    - price
+    - businessType
+}
+
+class Announcement {
+    - personObject
+    - propertyObject
+    - price
+    - commission
+    - contractDuration
+    - date
+}
+
+SystemAdministrator "1" -- "*" Agency : has >
+Person "1" -- "*" Property: has >
+
+Property "1" -- "1" Announcement : becomes >
+
+Announcement "1" -- "1" Transaction : becomes >
+
+Agency "1" -- "*" Property : has >
+
+Agency "1" -- "*" Announcement : has >
+
+Agency "1" - "*" Transaction : has >
+
+
+@enduml

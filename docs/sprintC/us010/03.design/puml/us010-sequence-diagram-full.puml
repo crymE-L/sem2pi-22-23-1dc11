@@ -1,0 +1,94 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Person" as user
+
+participant ":DisplayPropertyUI" as UI
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant ":PropertyMapper" as PropertyMapper
+participant ":TransactionController" as Controller
+participant "TransactionRepository:\natransactionRepository" as TransactionRepository
+participant "applicationSession\n:AplicationSession" as AppSession
+
+activate user
+	user -> UI : asks to create a purchase order
+
+	activate UI
+		UI -> RepositorySingleton : getInstance()
+
+		activate RepositorySingleton
+			RepositorySingleton --> UI : repositories
+		deactivate RepositorySingleton
+
+		UI -> PLAT : getPropertyRepository
+
+		activate PLAT
+			PLAT -> UI : propertyRepository
+		deactivate PLAT
+
+		activate PropertyMapper
+			UI -> PropertyMapper : propertiesList = toPropertiesListDto(propertiesList)
+
+			activate PropertyMapper
+				Loop for each agency
+					PropertyMapper -> PropertyMapper : property = toPropertyDto(property)
+
+					activate PropertyMapper
+						PropertyMapper --> PropertyMapper : addPropertyToPropertyListDto
+					deactivate PropertyMapper
+				end
+			deactivate PropertyMapper
+
+			PropertyMapper --> UI : propertiesListDto
+		deactivate PropertyMapper
+
+		UI --> user : displays available properties
+
+		UI --> user : asks to select property
+
+		user -> UI : selects property
+
+		UI --> user : requests data for the transaction
+
+		user -> UI : sends data for the transaction
+
+		UI -> Controller : create(owner_id, buyer_id, price, property_id)
+
+		activate Controller
+			Controller -> RepositorySingleton : getInstance()
+
+			activate RepositorySingleton
+				RepositorySingleton --> Controller : repositories
+			deactivate RepositorySingleton
+
+			Controller -> PLAT : getTransactionRepository
+
+			activate PLAT
+				PLAT --> Controller : transactionRepository
+			deactivate PLAT
+
+			Controller -> TransactionRepository : getAllTransactions
+
+			activate TransactionRepository
+				TransactionRepository --> Controller : transactions
+			deactivate TransactionRepository
+
+			Controller -> AppSession : getCurrentUser()
+
+			activate AppSession
+				AppSession --> Controller : currentUser
+			deactivate AppSession
+
+			Controller --> UI : send success message
+		deactivate Controller
+
+		UI --> user : show success message
+	deactivate UI
+deactivate user
+
+@enduml

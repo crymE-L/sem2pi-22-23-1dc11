@@ -1,0 +1,127 @@
+@startuml
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+
+skinparam classAttributeIconSize 0
+
+
+class VisitRequestUI {}
+
+class VisitRequestController {
+    + getEmployeeList
+    + getPropertyList
+    + getMessageList
+    + getPersonList
+    }
+
+class EmployeeMapper {
+    +toEmployeeListDto(employeeList)
+}
+
+class PropertyMapper {
+    +toPropertyListDto(propertyList)
+}
+
+class MessageMapper {
+    +toMessageListDto(messageList)
+}
+
+class PersonMapper {
+    +toPersonListDto(personList)
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getEmployeeRepository
+    + getPropertyRepository
+    + getMessageRepository
+    + getPersonRepository
+    }
+
+class PersonRepository {
+    - personList
+}
+
+class EmployeeRepository {
+    - employeeList
+}
+
+class PropertyRepository {
+    - propertyList
+}
+
+class MessageRepository {
+    - messageList
+}
+
+class Person {
+    - String name
+    - String email
+    - String password
+    - Role role
+    }
+
+class Employee {
+    - int passport
+    - int vat
+    - String address
+    - long phone
+    - Agency agency
+    }
+
+class Property {
+    - String name
+    - String address
+    - int area
+    - float distanceFromCenter
+    - float price
+    - City city
+    - District district
+    - State state
+    - Person owner
+}
+
+class Message {
+    - String text
+
+    + create(text)
+}
+
+VisitRequestUI .> VisitRequestController
+
+VisitRequestController .> Repositories : repositories
+
+VisitRequestController --> EmployeeMapper
+
+VisitRequestController --> PropertyMapper
+
+VisitRequestController --> PersonMapper
+
+VisitRequestController --> MessageMapper
+
+Repositories -> Repositories : instance
+
+Repositories --> "1" PersonRepository
+
+PersonMapper --> Person
+
+Repositories --> "1" EmployeeRepository
+
+EmployeeMapper --> "*" Employee
+
+Repositories --> "1" PropertyRepository
+
+PropertyMapper --> "*" Property
+
+Repositories --> "1" MessageRepository
+
+MessageMapper --> "*" Message
+
+Message --> UnregisteredUser : createdBy
+
+Person --> UnregisteredUser : createdBy
+
+@enduml

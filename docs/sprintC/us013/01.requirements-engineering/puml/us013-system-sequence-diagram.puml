@@ -1,0 +1,21 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+actor "Network Manager" as networkManager
+participant ":System" as System
+
+activate networkManager
+
+    networkManager -> System : Asks to list all the employees working in every store of the network
+    activate System
+
+    System --> networkManager : Show the list of all employees
+    deactivate System
+
+    deactivate networkManager
+
+@enduml

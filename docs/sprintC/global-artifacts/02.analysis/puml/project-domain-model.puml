@@ -1,0 +1,164 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+skinparam linetype ortho
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+'class Platform {
+'  -description
+'}
+
+class TransactionRequest {
+    - address
+    - area
+    - price
+    - city
+    - commission
+}
+
+class TransactionType {
+    - name
+}
+
+class User {
+    - name
+    - email
+ 	- password
+ 	- role
+}
+
+
+
+class AgencyNetwork {
+	- name
+	- address
+	- email
+	- phone
+	- agencies
+}
+
+class Agency {
+	- name
+	- vat
+	- location
+	- email
+	- phone
+	- employees
+	- manager
+}
+
+class State {
+    - state
+}
+
+class District {
+    - district
+}
+
+class City {
+    - city
+}
+
+class Employee {
+	- passport
+	- vat
+	- address
+	- phone
+	- agency
+}
+
+class Property {
+	- photos
+	- area
+	- distanceFromCenter
+	- price
+	- owner
+	- employee
+	- visitRequests
+	- address
+}
+
+class Role {
+    - name
+    - permissionLevel
+}
+
+    class Habitation {
+        - bedrooms
+        - bathrooms
+        - parkingSpaces
+        - hasCentralHeating
+        - hasAirConditioning
+    }
+
+    class House {
+        - hasBasement
+        - hasInhabitableLoft
+        - sunExposure
+    }
+
+' willBuy is a boolean that will be filled
+' out later (false by default) to indicate
+' if the visitor actually wants the property
+class VisitRequest {
+	- user
+	- property
+	- date
+	- time
+	- willBuy
+}
+
+class Date {
+    - day
+    - month
+    - year
+}
+
+class Time {
+    - hours
+    - minutes
+    - seconds
+}
+
+' This transaction type can be either
+' lease of sale
+
+User "*" -- "1" Role: Has >
+User "1" -- "*" TransactionRequest: Sends an >
+AgencyNetwork "1" -- "1..*" Agency
+Agency "1" -- "*" Employee
+VisitRequest "1" -- "1" Date : Has >
+VisitRequest "1" -- "1" Time : Has >
+User "1" -- "*" Property: Sees >
+Property "1" -- "1" Habitation
+Habitation "1" -- "1" House
+Employee "*" -- "1" Role: Has >
+Agency "1" -- "1" State : Has >
+Agency "1" -- "1" District : Has >
+Agency "1" -- "1" City : Has >
+AgencyNetwork "1" -- "1" State : Has >
+AgencyNetwork "1" -- "1" District : Has >
+AgencyNetwork "1" -- "1" City : Has >
+
+
+Property "1" -- "1" State: Has >
+Property "1" -- "1" District : Has >
+Property "1" -- "1" City : Has >
+VisitRequest "1" -- "1" Employee
+VisitRequest "1" -- "1" User
+VisitRequest "1" -- "1" Property
+Employee "1" -- "*" Property: Can publish >
+TransactionRequest "*" -- "1" Employee: Is reviewed by >
+State "1" -- "1..*" District: Has >
+District "1" -- "1..*" City: Has >
+
+
+top to bottom direction
+
+@enduml

@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+Owner -> System: Asks to create request
+activate System
+System --> Owner: shows options (sale or rent) and asks to select one
+deactivate System
+activate Owner
+Owner -> System: selects one of the options
+deactivate Owner
+activate System
+
+
+System--> Owner: Display available agents
+deactivate System
+activate Owner
+Owner-> System: Selects one agent
+deactivate Owner
+activate System
+System--> Owner: Select a type of property (Land, house or appartment)
+deactivate System
+activate Owner
+Owner-> System: Selects one type
+deactivate Owner
+activate System
+System--> Owner: Requests data
+deactivate System
+activate Owner
+
+Owner-> System: Submits data
+deactivate Owner
+activate System
+alt Success
+    System --> Owner: Communicate success
+
+else Failure
+    System --> Owner: Communicate failure
+    deactivate System
+end
+
+@enduml
